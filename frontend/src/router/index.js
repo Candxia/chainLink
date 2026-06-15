@@ -46,6 +46,7 @@ const routes = [
       { path: 'transfer', name: 'TransferList', component: () => import('@/views/records/TransferList.vue'), meta: { title: '调拨记录' } },
       // 系统管理
       { path: 'config', name: 'ConfigList', component: () => import('@/views/system/ConfigList.vue'), meta: { title: '系统配置' } },
+      { path: 'api-rule', name: 'ApiRuleList', component: () => import('@/views/system/ApiRuleList.vue'), meta: { title: 'API 管理' } },
       { path: 'logs', name: 'LogList', component: () => import('@/views/system/LogList.vue'), meta: { title: '操作日志' } },
     ],
   },

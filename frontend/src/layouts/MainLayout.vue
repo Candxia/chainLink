@@ -99,6 +99,7 @@
             <span>系统管理</span>
           </template>
           <el-menu-item index="/config">系统配置</el-menu-item>
+          <el-menu-item index="/api-rule">API 管理</el-menu-item>
           <el-menu-item index="/logs">操作日志</el-menu-item>
         </el-sub-menu>
       </el-menu>
