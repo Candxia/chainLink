@@ -1,0 +1,43 @@
+server:
+  address: ":8099"
+  serverRoot: "resource/public"
+  dumpRouterMap: true
+  routeOverwrite: true
+  accessLogEnabled: true
+  errorLogEnabled: true
+  logPath: "runtime/log"
+
+database:
+  default:
+    host: "47.109.157.55"
+    port: 10001
+    user: "root"
+    pass: "Root@123456"
+    name: "cl_system"
+    type: "mysql"
+    role: "master"
+    charset: "utf8mb4"
+    maxOpen: 25
+    maxIdle: 10
+    maxLifetime: "30s"
+
+redis:
+  default:
+    address: "47.109.157.55:10002"
+    db: 0
+    pass: "Redis@123456"
+    idleTimeout: "60s"
+
+jwt:
+  secret: "cl_system_jwt_secret_key_2024"
+  expire: 86400
+
+logger:
+  path: "runtime/log"
+  level: "all"
+  stdout: true
+
+blockchain:
+  nodeUrl: "http://127.0.0.1:8545"
+  chainId: 1337
+  contractAddress: "0x..."
