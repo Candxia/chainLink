@@ -12,7 +12,7 @@ import (
 
 func Router(group *ghttp.RouterGroup) {
 	// ==================== 用户与权限 ====================
-	userGroup := group.Group("/api/user")
+	userGroup := group.Group("/user")
 	userGroup.POST("/login", user.Ctl.Login)
 	userGroup.POST("/register", user.Ctl.Register)
 	userGroup.POST("/logout", user.Ctl.Logout)
@@ -32,7 +32,7 @@ func Router(group *ghttp.RouterGroup) {
 	userGroup.PUT("/enterprise", user.Ctl.UpdateEnterprise)
 
 	// ==================== 产品溯源 ====================
-	traceGroup := group.Group("/api/trace")
+	traceGroup := group.Group("/trace")
 	traceGroup.Middleware(AuthMiddleware)
 	traceGroup.POST("/product", trace.Ctl.CreateProduct)
 	traceGroup.PUT("/product", trace.Ctl.UpdateProduct)
@@ -52,7 +52,7 @@ func Router(group *ghttp.RouterGroup) {
 	traceGroup.GET("/public/query", trace.Ctl.PublicQuery)
 
 	// ==================== 供应链管理 ====================
-	supplyGroup := group.Group("/api/supply")
+	supplyGroup := group.Group("/supply")
 	supplyGroup.Middleware(AuthMiddleware)
 	supplyGroup.POST("/supplier", supply.Ctl.CreateSupplier)
 	supplyGroup.PUT("/supplier", supply.Ctl.UpdateSupplier)
@@ -71,7 +71,7 @@ func Router(group *ghttp.RouterGroup) {
 	supplyGroup.GET("/logistics/:orderId", supply.Ctl.GetLogisticsList)
 
 	// ==================== 区块链管理 ====================
-	blockGroup := group.Group("/api/blockchain")
+	blockGroup := group.Group("/blockchain")
 	blockGroup.Middleware(AuthMiddleware)
 	blockGroup.GET("/blocks", blockchain.Ctl.GetBlockList)
 	blockGroup.GET("/block/:hash", blockchain.Ctl.GetBlockByHash)
@@ -84,7 +84,7 @@ func Router(group *ghttp.RouterGroup) {
 	blockGroup.GET("/data/verify", blockchain.Ctl.VerifyData)
 
 	// ==================== 系统管理 ====================
-	sysGroup := group.Group("/api/system")
+	sysGroup := group.Group("/system")
 	sysGroup.Middleware(AuthMiddleware)
 	sysGroup.GET("/dashboard", system.Ctl.GetDashboard)
 	sysGroup.GET("/config", system.Ctl.GetConfig)
@@ -95,7 +95,7 @@ func Router(group *ghttp.RouterGroup) {
 	sysGroup.POST("/notification/read/:id", system.Ctl.MarkNotificationRead)
 
 	// ==================== 文件上传 ====================
-	group.Group("/api/upload").Middleware(AuthMiddleware).POST("/", system.Ctl.UploadFile)
+	group.Group("/upload").Middleware(AuthMiddleware).POST("/", system.Ctl.UploadFile)
 }
 
 func AuthMiddleware(r *ghttp.Request) {

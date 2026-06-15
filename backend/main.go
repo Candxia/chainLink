@@ -1,4 +1,4 @@
-package main
+﻿package main
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"github.com/gogf/gf/v2/net/ghttp"
 	"cl_system/internal/cmd"
 	_ "cl_system/internal/logic"
+	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
 )
 
 func main() {
@@ -31,5 +32,6 @@ func MiddlewareCORS(r *ghttp.Request) {
 }
 
 func init() {
-	fmt.Println("链环系统启动中...")
+	fmt.Println("閾剧幆绯荤粺鍚姩涓?..")
 }
+
