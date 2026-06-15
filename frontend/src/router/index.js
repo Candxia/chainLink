@@ -32,6 +32,18 @@ const routes = [
       { path: 'blockchain', name: 'BlockList', component: () => import('@/views/blockchain/BlockList.vue'), meta: { title: '区块浏览器' } },
       { path: 'blockchain/transaction', name: 'TransactionList', component: () => import('@/views/blockchain/TransactionList.vue'), meta: { title: '交易记录' } },
       { path: 'blockchain/contract', name: 'ContractList', component: () => import('@/views/blockchain/ContractList.vue'), meta: { title: '合约管理' } },
+      // 仓库管理
+      { path: 'warehouse/list', name: 'WarehouseList', component: () => import('@/views/warehouse/WarehouseList.vue'), meta: { title: '仓库信息' } },
+      { path: 'warehouse-area', name: 'WarehouseArea', component: () => import('@/views/warehouse/WarehouseArea.vue'), meta: { title: '区域货架管理' } },
+      { path: 'stocktake', name: 'StocktakeList', component: () => import('@/views/warehouse/StocktakeList.vue'), meta: { title: '仓库盘存' } },
+      { path: 'car-inventory', name: 'CarList', component: () => import('@/views/inventory/CarList.vue'), meta: { title: '整车库存' } },
+      { path: 'raw-material', name: 'RawMaterialList', component: () => import('@/views/inventory/RawMaterialList.vue'), meta: { title: '原材料库存' } },
+      { path: 'waste', name: 'WasteList', component: () => import('@/views/inventory/WasteList.vue'), meta: { title: '危固废管理' } },
+      { path: 'part-traceable', name: 'PartTraceableList', component: () => import('@/views/inventory/PartTraceableList.vue'), meta: { title: '配件-溯源件' } },
+      { path: 'part-untraceable', name: 'PartUntraceableList', component: () => import('@/views/inventory/PartUntraceableList.vue'), meta: { title: '配件-非溯源件' } },
+      { path: 'inbound', name: 'InboundList', component: () => import('@/views/records/InboundList.vue'), meta: { title: '入库记录' } },
+      { path: 'outbound', name: 'OutboundList', component: () => import('@/views/records/OutboundList.vue'), meta: { title: '出库记录' } },
+      { path: 'transfer', name: 'TransferList', component: () => import('@/views/records/TransferList.vue'), meta: { title: '调拨记录' } },
       // 系统管理
       { path: 'config', name: 'ConfigList', component: () => import('@/views/system/ConfigList.vue'), meta: { title: '系统配置' } },
       { path: 'logs', name: 'LogList', component: () => import('@/views/system/LogList.vue'), meta: { title: '操作日志' } },

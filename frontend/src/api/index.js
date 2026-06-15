@@ -106,6 +106,54 @@ export const blockchainApi = {
   verifyData: (params) => request.get('/blockchain/data/verify', { params }),
 }
 
+// ==================== 仓库管理 ====================
+export const warehouseApi = {
+  // 仓库信息
+  getWarehouseList: (params) => request.get('/v1/warehouse/list', { params }),
+  createWarehouse: (data) => request.post('/v1/warehouse', data),
+  updateWarehouse: (data) => request.put('/v1/warehouse', data),
+  deleteWarehouse: (id) => request.delete(`/v1/warehouse/${id}`),
+  // 区域货架
+  getAreaList: (params) => request.get('/v1/warehouse/area/list', { params }),
+  createArea: (data) => request.post('/v1/warehouse/area', data),
+  updateArea: (data) => request.put('/v1/warehouse/area', data),
+  deleteArea: (id) => request.delete(`/v1/warehouse/area/${id}`),
+  createShelf: (data) => request.post('/v1/warehouse/shelf', data),
+  updateShelf: (data) => request.put('/v1/warehouse/shelf', data),
+  deleteShelf: (id) => request.delete(`/v1/warehouse/shelf/${id}`),
+  // 盘存
+  getStocktakeList: (params) => request.get('/v1/warehouse/stocktakes', { params }),
+  createStocktake: (data) => request.post('/v1/warehouse/stocktakes', data),
+  deleteStocktake: (id) => request.delete(`/v1/warehouse/stocktakes/${id}`),
+}
+
+// ==================== 库存管理 ====================
+export const inventoryApi = {
+  // 整车
+  getCarList: (params) => request.get('/v1/inventory/cars', { params }),
+  // 原材料
+  getRawMaterialList: (params) => request.get('/v1/inventory/raw-materials', { params }),
+  // 危固废
+  getWasteList: (params) => request.get('/v1/inventory/waste', { params }),
+  // 配件-溯源件
+  getPartTraceableList: (params) => request.get('/v1/inventory/parts/traceable', { params }),
+  partTraceableOutbound: (data) => request.post('/v1/inventory/parts/traceable/outbound', data),
+  // 配件-非溯源件
+  getPartUntraceableList: (params) => request.get('/v1/inventory/parts/non-traceable', { params }),
+  partUntraceableInbound: (data) => request.post('/v1/inventory/parts/non-traceable/inbound', data),
+  partUntraceableOutbound: (data) => request.post('/v1/inventory/parts/non-traceable/outbound', data),
+}
+
+// ==================== 操作记录 ====================
+export const recordApi = {
+  getInboundList: (params) => request.get('/v1/records/inbound', { params }),
+  getInboundDetail: (id) => request.get(`/v1/records/inbound/${id}`),
+  getOutboundList: (params) => request.get('/v1/records/outbound', { params }),
+  getOutboundDetail: (id) => request.get(`/v1/records/outbound/${id}`),
+  getTransferList: (params) => request.get('/v1/records/transfer', { params }),
+  getTransferDetail: (id) => request.get(`/v1/records/transfer/${id}`),
+}
+
 // ==================== 系统管理 ====================
 export const systemApi = {
   getDashboard: () => request.get('/system/dashboard'),

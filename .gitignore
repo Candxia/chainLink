@@ -21,3 +21,6 @@ Thumbs.db
 
 # Logs
 *.log
+tests/fix_verify.py
+tests/login_test.py
+tests/login.json

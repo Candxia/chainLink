@@ -6,4 +6,5 @@ import (
 	_ "cl_system/internal/logic/supply"
 	_ "cl_system/internal/logic/blockchain"
 	_ "cl_system/internal/logic/system"
+	_ "cl_system/internal/logic/warehouse"
 )

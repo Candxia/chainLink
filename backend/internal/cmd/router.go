@@ -8,6 +8,7 @@ import (
 	"cl_system/internal/controller/supply"
 	"cl_system/internal/controller/blockchain"
 	"cl_system/internal/controller/system"
+	"cl_system/internal/controller/warehouse"
 )
 
 func Router(group *ghttp.RouterGroup) {
@@ -93,6 +94,64 @@ func Router(group *ghttp.RouterGroup) {
 	sysGroup.DELETE("/logs/:id", system.Ctl.DeleteLog)
 	sysGroup.GET("/notifications", system.Ctl.GetNotificationList)
 	sysGroup.POST("/notification/read/:id", system.Ctl.MarkNotificationRead)
+
+	// ==================== 仓库管理 ====================
+	warehouseGroup := group.Group("/warehouse")
+	warehouseGroup.Middleware(AuthMiddleware)
+	warehouseGroup.GET("/list", warehouse.Ctl.GetWarehouseList)
+	warehouseGroup.POST("/", warehouse.Ctl.CreateWarehouse)
+	warehouseGroup.PUT("/", warehouse.Ctl.UpdateWarehouse)
+	warehouseGroup.DELETE("/:id", warehouse.Ctl.DeleteWarehouse)
+	warehouseGroup.PUT("/:id/status", warehouse.Ctl.UpdateWarehouseStatus)
+
+	// 区域
+	warehouseGroup.GET("/area/list", warehouse.Ctl.GetAreaList)
+	warehouseGroup.POST("/area", warehouse.Ctl.CreateArea)
+	warehouseGroup.DELETE("/area/:id", warehouse.Ctl.DeleteArea)
+
+	// 货架
+	warehouseGroup.GET("/shelf/list", warehouse.Ctl.GetShelfList)
+	warehouseGroup.POST("/shelf", warehouse.Ctl.CreateShelf)
+	warehouseGroup.DELETE("/shelf/:id", warehouse.Ctl.DeleteShelf)
+
+	// 盘存
+	warehouseGroup.GET("/stocktake/list", warehouse.Ctl.GetStocktakeList)
+	warehouseGroup.POST("/stocktake", warehouse.Ctl.CreateStocktake)
+
+	// ==================== 库存管理 ====================
+	inventoryGroup := group.Group("/inventory")
+	inventoryGroup.Middleware(AuthMiddleware)
+
+	// 整车库存
+	inventoryGroup.GET("/car/list", warehouse.Ctl.GetInventoryCarList)
+
+	// 原材料库存
+	inventoryGroup.GET("/raw-material/list", warehouse.Ctl.GetRawMaterialList)
+	inventoryGroup.POST("/raw-material/in", warehouse.Ctl.RawMaterialIn)
+	inventoryGroup.POST("/raw-material/out", warehouse.Ctl.RawMaterialOut)
+
+	// 危固废
+	inventoryGroup.GET("/waste/list", warehouse.Ctl.GetWasteList)
+	inventoryGroup.POST("/waste/in", warehouse.Ctl.WasteIn)
+
+	// 溯源件
+	inventoryGroup.GET("/part/traceable/list", warehouse.Ctl.GetPartTraceableList)
+	inventoryGroup.POST("/part/traceable/out", warehouse.Ctl.PartTraceableOut)
+
+	// 非溯源件
+	inventoryGroup.GET("/part/untraceable/list", warehouse.Ctl.GetPartUntraceableList)
+	inventoryGroup.POST("/part/untraceable/in", warehouse.Ctl.PartUntraceableIn)
+	inventoryGroup.POST("/part/untraceable/out", warehouse.Ctl.PartUntraceableOut)
+
+	// ==================== 操作记录 ====================
+	recordGroup := group.Group("/records")
+	recordGroup.Middleware(AuthMiddleware)
+	recordGroup.GET("/inbound", warehouse.Ctl.GetInboundRecordList)
+	recordGroup.GET("/inbound/:id", warehouse.Ctl.GetInboundRecordDetail)
+	recordGroup.GET("/outbound", warehouse.Ctl.GetOutboundRecordList)
+	recordGroup.GET("/outbound/:id", warehouse.Ctl.GetOutboundRecordDetail)
+	recordGroup.GET("/transfer", warehouse.Ctl.GetTransferRecordList)
+	recordGroup.GET("/transfer/:id", warehouse.Ctl.GetTransferRecordDetail)
 
 	// ==================== 文件上传 ====================
 	group.Group("/upload").Middleware(AuthMiddleware).POST("/", system.Ctl.UploadFile)

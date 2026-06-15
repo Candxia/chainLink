@@ -198,3 +198,241 @@ type DashboardData struct {
 	TotalBlockCount    int `json:"totalBlockCount"`
 	ActiveContracts    int `json:"activeContracts"`
 }
+
+// ==================== 仓库管理 数据模型 ====================
+
+type WarehouseInfo struct {
+	Id        uint        `json:"id"`
+	Code      string      `json:"code"`
+	Name      string      `json:"name"`
+	Address   string      `json:"address"`
+	Company   string      `json:"company"`
+	Status    int         `json:"status"`
+	CreatedAt *gtime.Time `json:"createdAt"`
+	UpdatedAt *gtime.Time `json:"updatedAt"`
+}
+
+type WarehouseCreateInput struct {
+	Code    string `json:"code" v:"required#请输入仓库编码"`
+	Name    string `json:"name" v:"required#请输入仓库名称"`
+	Address string `json:"address"`
+	Company string `json:"company"`
+}
+
+type WarehouseUpdateInput struct {
+	Id      uint   `json:"id" v:"required#请输入仓库ID"`
+	Code    string `json:"code"`
+	Name    string `json:"name"`
+	Address string `json:"address"`
+	Company string `json:"company"`
+	Status  int    `json:"status"`
+}
+
+type WarehouseAreaInfo struct {
+	Id          uint        `json:"id"`
+	WarehouseId uint        `json:"warehouseId"`
+	Name        string      `json:"name"`
+	Description string      `json:"description"`
+	CreatedAt   *gtime.Time `json:"createdAt"`
+}
+
+type WarehouseAreaCreateInput struct {
+	WarehouseId uint   `json:"warehouseId" v:"required#请选择所属仓库"`
+	Name        string `json:"name" v:"required#请输入区域名称"`
+	Description string `json:"description"`
+}
+
+type WarehouseShelfInfo struct {
+	Id          uint        `json:"id"`
+	AreaId      uint        `json:"areaId"`
+	Name        string      `json:"name"`
+	Description string      `json:"description"`
+	CreatedAt   *gtime.Time `json:"createdAt"`
+}
+
+type WarehouseShelfCreateInput struct {
+	AreaId      uint   `json:"areaId" v:"required#请选择所属区域"`
+	Name        string `json:"name" v:"required#请输入货架名称"`
+	Description string `json:"description"`
+}
+
+type StocktakeInfo struct {
+	Id           uint        `json:"id"`
+	WarehouseId  uint        `json:"warehouseId"`
+	StocktakeNo  string      `json:"stocktakeNo"`
+	Type         int         `json:"type"`
+	Status       int         `json:"status"`
+	Operator     string      `json:"operator"`
+	StocktakeTime *gtime.Time `json:"stocktakeTime"`
+	Remark       string      `json:"remark"`
+	CreatedAt    *gtime.Time `json:"createdAt"`
+}
+
+type StocktakeCreateInput struct {
+	WarehouseId uint   `json:"warehouseId" v:"required#请选择仓库"`
+	Type        int    `json:"type" v:"required#请选择盘点类型"`
+	Operator    string `json:"operator" v:"required#请输入盘点人员"`
+	Remark      string `json:"remark"`
+}
+
+type InventoryCarInfo struct {
+	Id          uint        `json:"id"`
+	WarehouseId uint        `json:"warehouseId"`
+	Vin         string      `json:"vin"`
+	Brand       string      `json:"brand"`
+	Model       string      `json:"model"`
+	PlateNo     string      `json:"plateNo"`
+	Color       string      `json:"color"`
+	Year        int         `json:"year"`
+	Status      int         `json:"status"`
+	ShelfId     uint        `json:"shelfId"`
+	EntryDate   *gtime.Time `json:"entryDate"`
+	Remark      string      `json:"remark"`
+	CreatedAt   *gtime.Time `json:"createdAt"`
+	UpdatedAt   *gtime.Time `json:"updatedAt"`
+}
+
+type InventoryRawMaterialInfo struct {
+	Id           uint        `json:"id"`
+	WarehouseId  uint        `json:"warehouseId"`
+	MaterialNo   string      `json:"materialNo"`
+	MaterialType string      `json:"materialType"`
+	Quantity     float64     `json:"quantity"`
+	ShelfId      uint        `json:"shelfId"`
+	Remark       string      `json:"remark"`
+	CreatedAt    *gtime.Time `json:"createdAt"`
+	UpdatedAt    *gtime.Time `json:"updatedAt"`
+}
+
+type RawMaterialInInput struct {
+	WarehouseId  uint    `json:"warehouseId" v:"required#请选择仓库"`
+	MaterialNo   string  `json:"materialNo" v:"required#请输入原材料编号"`
+	MaterialType string  `json:"materialType" v:"required#请输入原材料类型"`
+	Quantity     float64 `json:"quantity" v:"required#请输入数量"`
+	ShelfId      uint    `json:"shelfId"`
+	Operator     string  `json:"operator"`
+	Remark       string  `json:"remark"`
+}
+
+type RawMaterialOutInput struct {
+	Id       uint    `json:"id" v:"required#请选择原材料"`
+	Quantity float64 `json:"quantity" v:"required#请输入出库数量"`
+	Operator string  `json:"operator"`
+	Remark   string  `json:"remark"`
+}
+
+type InventoryWasteInfo struct {
+	Id          uint        `json:"id"`
+	WarehouseId uint        `json:"warehouseId"`
+	WasteNo     string      `json:"wasteNo"`
+	WasteType   string      `json:"wasteType"`
+	Quantity    float64     `json:"quantity"`
+	ShelfId     uint        `json:"shelfId"`
+	Remark      string      `json:"remark"`
+	CreatedAt   *gtime.Time `json:"createdAt"`
+	UpdatedAt   *gtime.Time `json:"updatedAt"`
+}
+
+type WasteInInput struct {
+	WarehouseId uint    `json:"warehouseId" v:"required#请选择仓库"`
+	WasteNo     string  `json:"wasteNo" v:"required#请输入废料编号"`
+	WasteType   string  `json:"wasteType" v:"required#请选择废料类型"`
+	Quantity    float64 `json:"quantity" v:"required#请输入数量"`
+	ShelfId     uint    `json:"shelfId"`
+	Operator    string  `json:"operator"`
+	Remark      string  `json:"remark"`
+}
+
+type InventoryPartTraceableInfo struct {
+	Id          uint        `json:"id"`
+	WarehouseId uint        `json:"warehouseId"`
+	PartName    string      `json:"partName"`
+	PartType    string      `json:"partType"`
+	CarModel    string      `json:"carModel"`
+	CarSeries   string      `json:"carSeries"`
+	Description string      `json:"description"`
+	Vin         string      `json:"vin"`
+	ShelfId     uint        `json:"shelfId"`
+	Quantity    int         `json:"quantity"`
+	Remark      string      `json:"remark"`
+	CreatedAt   *gtime.Time `json:"createdAt"`
+	UpdatedAt   *gtime.Time `json:"updatedAt"`
+}
+
+type PartTraceableOutInput struct {
+	Id       uint   `json:"id" v:"required#请选择配件"`
+	Quantity int    `json:"quantity" v:"required#请输入出库数量"`
+	Operator string `json:"operator"`
+	Remark   string `json:"remark"`
+}
+
+type InventoryPartUntraceableInfo struct {
+	Id          uint        `json:"id"`
+	WarehouseId uint        `json:"warehouseId"`
+	PartName    string      `json:"partName"`
+	PartType    string      `json:"partType"`
+	Quantity    int         `json:"quantity"`
+	Remark      string      `json:"remark"`
+	CreatedAt   *gtime.Time `json:"createdAt"`
+	UpdatedAt   *gtime.Time `json:"updatedAt"`
+}
+
+type PartUntraceableInInput struct {
+	WarehouseId uint   `json:"warehouseId" v:"required#请选择仓库"`
+	PartName    string `json:"partName" v:"required#请输入配件名称"`
+	PartType    string `json:"partType"`
+	Quantity    int    `json:"quantity" v:"required#请输入数量"`
+	Operator    string `json:"operator"`
+	Remark      string `json:"remark"`
+}
+
+type PartUntraceableOutInput struct {
+	Id       uint   `json:"id" v:"required#请选择配件"`
+	Quantity int    `json:"quantity" v:"required#请输入出库数量"`
+	Operator string `json:"operator"`
+	Remark   string `json:"remark"`
+}
+
+type InboundRecordInfo struct {
+	Id            uint        `json:"id"`
+	RecordNo      string      `json:"recordNo"`
+	InboundType   string      `json:"inboundType"`
+	InboundMethod string      `json:"inboundMethod"`
+	WarehouseId   uint        `json:"warehouseId"`
+	Operator      string      `json:"operator"`
+	TotalQuantity int         `json:"totalQuantity"`
+	Status        int         `json:"status"`
+	Remark        string      `json:"remark"`
+	InboundTime   *gtime.Time `json:"inboundTime"`
+	CreatedAt     *gtime.Time `json:"createdAt"`
+}
+
+type OutboundRecordInfo struct {
+	Id             uint        `json:"id"`
+	RecordNo       string      `json:"recordNo"`
+	OutboundType   string      `json:"outboundType"`
+	OutboundMethod string      `json:"outboundMethod"`
+	WarehouseId    uint        `json:"warehouseId"`
+	Operator       string      `json:"operator"`
+	TotalQuantity  int         `json:"totalQuantity"`
+	Status         int         `json:"status"`
+	Remark         string      `json:"remark"`
+	OutboundTime   *gtime.Time `json:"outboundTime"`
+	CreatedAt      *gtime.Time `json:"createdAt"`
+}
+
+type TransferRecordInfo struct {
+	Id              uint        `json:"id"`
+	RecordNo        string      `json:"recordNo"`
+	TransferType    string      `json:"transferType"`
+	FromWarehouseId uint        `json:"fromWarehouseId"`
+	ToWarehouseId   uint        `json:"toWarehouseId"`
+	ItemTypeDesc    string      `json:"itemTypeDesc"`
+	TotalCategories int         `json:"totalCategories"`
+	TotalQuantity   int         `json:"totalQuantity"`
+	Status          int         `json:"status"`
+	Operator        string      `json:"operator"`
+	Remark          string      `json:"remark"`
+	TransferTime    *gtime.Time `json:"transferTime"`
+	CreatedAt       *gtime.Time `json:"createdAt"`
+}

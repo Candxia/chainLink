@@ -61,6 +61,38 @@
           <el-menu-item index="/blockchain/contract">合约管理</el-menu-item>
         </el-sub-menu>
 
+        <el-sub-menu index="warehouse">
+          <template #title>
+            <el-icon><HomeFilled /></el-icon>
+            <span>仓库管理</span>
+          </template>
+          <el-menu-item index="/warehouse/list">仓库信息</el-menu-item>
+          <el-menu-item index="/warehouse-area">区域货架管理</el-menu-item>
+          <el-menu-item index="/stocktake">仓库盘存</el-menu-item>
+        </el-sub-menu>
+
+        <el-sub-menu index="inventory">
+          <template #title>
+            <el-icon><Box /></el-icon>
+            <span>库存管理</span>
+          </template>
+          <el-menu-item index="/car-inventory">整车库存</el-menu-item>
+          <el-menu-item index="/raw-material">原材料库存</el-menu-item>
+          <el-menu-item index="/waste">危固废管理</el-menu-item>
+          <el-menu-item index="/part-traceable">配件-溯源件</el-menu-item>
+          <el-menu-item index="/part-untraceable">配件-非溯源件</el-menu-item>
+        </el-sub-menu>
+
+        <el-sub-menu index="records">
+          <template #title>
+            <el-icon><Document /></el-icon>
+            <span>操作记录</span>
+          </template>
+          <el-menu-item index="/inbound">入库记录</el-menu-item>
+          <el-menu-item index="/outbound">出库记录</el-menu-item>
+          <el-menu-item index="/transfer">调拨记录</el-menu-item>
+        </el-sub-menu>
+
         <el-sub-menu index="system">
           <template #title>
             <el-icon><Setting /></el-icon>

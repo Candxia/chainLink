@@ -68,6 +68,49 @@ type IBlockchain interface {
 	VerifyData(ctx context.Context, hash, txId string) (map[string]interface{}, error)
 }
 
+type IWarehouse interface {
+	// 仓库信息
+	GetWarehouseList(ctx context.Context, page, pageSize int, name string) ([]*model.WarehouseInfo, int, error)
+	CreateWarehouse(ctx context.Context, req model.WarehouseCreateInput) error
+	UpdateWarehouse(ctx context.Context, req model.WarehouseUpdateInput) error
+	DeleteWarehouse(ctx context.Context, id uint) error
+	UpdateWarehouseStatus(ctx context.Context, id uint, status int) error
+	// 区域
+	GetAreaList(ctx context.Context, warehouseId uint) ([]*model.WarehouseAreaInfo, error)
+	CreateArea(ctx context.Context, req model.WarehouseAreaCreateInput) error
+	DeleteArea(ctx context.Context, id uint) error
+	// 货架
+	GetShelfList(ctx context.Context, areaId uint) ([]*model.WarehouseShelfInfo, error)
+	CreateShelf(ctx context.Context, req model.WarehouseShelfCreateInput) error
+	DeleteShelf(ctx context.Context, id uint) error
+	// 盘存
+	GetStocktakeList(ctx context.Context, page, pageSize int, warehouseId uint) ([]*model.StocktakeInfo, int, error)
+	CreateStocktake(ctx context.Context, req model.StocktakeCreateInput) error
+	// 整车库存
+	GetInventoryCarList(ctx context.Context, page, pageSize int, warehouseId uint, brand, modelName, vin string) ([]*model.InventoryCarInfo, int, error)
+	// 原材料库存
+	GetRawMaterialList(ctx context.Context, page, pageSize int, warehouseId uint) ([]*model.InventoryRawMaterialInfo, int, error)
+	RawMaterialIn(ctx context.Context, req model.RawMaterialInInput) error
+	RawMaterialOut(ctx context.Context, req model.RawMaterialOutInput) error
+	// 危固废库存
+	GetWasteList(ctx context.Context, page, pageSize int, warehouseId uint) ([]*model.InventoryWasteInfo, int, error)
+	WasteIn(ctx context.Context, req model.WasteInInput) error
+	// 溯源件
+	GetPartTraceableList(ctx context.Context, page, pageSize int, warehouseId uint, partName string) ([]*model.InventoryPartTraceableInfo, int, error)
+	PartTraceableOut(ctx context.Context, req model.PartTraceableOutInput) error
+	// 非溯源件
+	GetPartUntraceableList(ctx context.Context, page, pageSize int, warehouseId uint) ([]*model.InventoryPartUntraceableInfo, int, error)
+	PartUntraceableIn(ctx context.Context, req model.PartUntraceableInInput) error
+	PartUntraceableOut(ctx context.Context, req model.PartUntraceableOutInput) error
+	// 操作记录
+	GetInboundRecordList(ctx context.Context, page, pageSize int, inboundType string, warehouseId uint) ([]*model.InboundRecordInfo, int, error)
+	GetInboundRecordDetail(ctx context.Context, id uint) (*model.InboundRecordInfo, error)
+	GetOutboundRecordList(ctx context.Context, page, pageSize int, outboundType string, warehouseId uint) ([]*model.OutboundRecordInfo, int, error)
+	GetOutboundRecordDetail(ctx context.Context, id uint) (*model.OutboundRecordInfo, error)
+	GetTransferRecordList(ctx context.Context, page, pageSize int, transferType string) ([]*model.TransferRecordInfo, int, error)
+	GetTransferRecordDetail(ctx context.Context, id uint) (*model.TransferRecordInfo, error)
+}
+
 type ISystem interface {
 	GetDashboard(ctx context.Context) (*model.DashboardData, error)
 	GetConfigList(ctx context.Context) ([]*model.SystemConfig, error)
@@ -85,6 +128,7 @@ var (
 	localSupply     ISupply
 	localBlockchain IBlockchain
 	localSystem     ISystem
+	localWarehouse  IWarehouse
 )
 
 func User() IUser {
@@ -127,3 +171,12 @@ func RegisterTrace(s ITrace)     { localTrace = s }
 func RegisterSupply(s ISupply)   { localSupply = s }
 func RegisterBlockchain(s IBlockchain) { localBlockchain = s }
 func RegisterSystem(s ISystem)       { localSystem = s }
+
+func Warehouse() IWarehouse {
+	if localWarehouse == nil {
+		panic("Warehouse service not initialized")
+	}
+	return localWarehouse
+}
+
+func RegisterWarehouse(s IWarehouse) { localWarehouse = s }
