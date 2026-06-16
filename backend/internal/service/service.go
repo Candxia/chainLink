@@ -2,8 +2,11 @@ package service
 
 import (
 	"context"
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"cl_system/internal/model"
+	mdlSys "cl_system/internal/model/system"
+	"cl_system/internal/model/entity"
 )
 
 type IUser interface {
@@ -54,6 +57,68 @@ type ISupply interface {
 	GetStockList(ctx context.Context, page, pageSize int, productId uint) ([]*model.WarehouseRecord, int, error)
 	CreateLogisticsRecord(ctx context.Context, data map[string]interface{}) error
 	GetLogisticsList(ctx context.Context, orderId uint) ([]*model.LogisticsRecord, error)
+}
+
+// ==================== 系统管理 - 账号管理 ====================
+
+type IAdmin interface {
+	Add(ctx context.Context, params mdlSys.SysAdminAdd) error
+	Del(ctx context.Context, id int64) error
+	Edit(ctx context.Context, params mdlSys.SysAdminEdit) error
+	Info(ctx context.Context, id int64) (result mdlSys.SysAdminInfo, err error)
+	List(ctx context.Context, params mdlSys.SysAdminSearch) (result []mdlSys.SysAdminInfo, total int, err error)
+	Password(ctx context.Context, id int64, pwd string) error
+	Status(ctx context.Context, username string, status int) error
+	ClickOut(ctx context.Context, username string) error
+	SetOnline(ctx context.Context, info mdlSys.SysAdminOnline) error
+}
+
+// ==================== 系统管理 - API管理 ====================
+
+type IApi interface {
+	Add(ctx context.Context, params mdlSys.SysApiAdd) error
+	Del(ctx context.Context, id int64) error
+	Edit(ctx context.Context, params mdlSys.SysApiEdit) error
+	List(ctx context.Context, params mdlSys.SysApiSearch) (result []entity.SysApi, total int, err error)
+	Drop(ctx context.Context) (list []g.Map, err error)
+	Path(ctx context.Context) (list []g.Map, err error)
+}
+
+// ==================== 系统管理 - 角色管理 ====================
+
+type IRole interface {
+	Add(ctx context.Context, params mdlSys.SysRoleAdd) error
+	Del(ctx context.Context, id int64) error
+	Status(ctx context.Context, params mdlSys.SysRoleStatus) error
+	Edit(ctx context.Context, params mdlSys.SysRoleEdit) error
+	Info(ctx context.Context, id int64) (result mdlSys.SysRoleInfo, err error)
+	Drop(ctx context.Context) (result []g.Map, err error)
+	List(ctx context.Context, params mdlSys.SysRoleSearch) (result []mdlSys.SysRoleTree, total int, err error)
+	IsMobile(ctx context.Context, params mdlSys.SysRoleIsMobile) error
+}
+
+// ==================== 系统管理 - 菜单管理 ====================
+
+type IMenu interface {
+	Add(ctx context.Context, params mdlSys.SysMenuAdd) error
+	Del(ctx context.Context, id int64) error
+	Edit(ctx context.Context, params mdlSys.SysMenuEdit) error
+	Info(ctx context.Context, id int64) (result entity.SysMenu, err error)
+	List(ctx context.Context) (result []mdlSys.SysMenuTree, err error)
+	Role(ctx context.Context) (result []mdlSys.SysMenuRole, err error)
+	Drop(ctx context.Context, exMenutype []string) (result []g.Map, total int, err error)
+}
+
+// ==================== 系统管理 - 部门管理 ====================
+
+type IDept interface {
+	Add(ctx context.Context, params mdlSys.SysDeptAdd) error
+	Del(ctx context.Context, id int64) error
+	Exist(ctx context.Context, params mdlSys.SysDeptExist) (has bool)
+	Edit(ctx context.Context, params mdlSys.SysDeptEdit) error
+	Info(ctx context.Context, id int64) (result entity.SysDept, err error)
+	List(ctx context.Context, params mdlSys.SysDeptSearch) (result []mdlSys.SysDeptInfo, err error)
+	Drop(ctx context.Context) (result []mdlSys.SysDeptInfo, err error)
 }
 
 type IBlockchain interface {
@@ -123,10 +188,15 @@ type ISystem interface {
 }
 
 var (
+	localDept       IDept
 	localUser       IUser
 	localTrace      ITrace
 	localSupply     ISupply
 	localBlockchain IBlockchain
+	localAdmin      IAdmin
+	localApi        IApi
+	localRole       IRole
+	localMenu       IMenu
 	localSystem     ISystem
 	localWarehouse  IWarehouse
 )
@@ -166,11 +236,52 @@ func System() ISystem {
 	return localSystem
 }
 
+func Dept() IDept {
+	if localDept == nil {
+		panic("Dept service not initialized")
+	}
+	return localDept
+}
+
+func RegisterDept(s IDept) { localDept = s }
+
 func RegisterUser(s IUser)       { localUser = s }
 func RegisterTrace(s ITrace)     { localTrace = s }
 func RegisterSupply(s ISupply)   { localSupply = s }
 func RegisterBlockchain(s IBlockchain) { localBlockchain = s }
+func RegisterAdmin(s IAdmin)       { localAdmin = s }
+func RegisterApi(s IApi)           { localApi = s }
+func RegisterRole(s IRole)         { localRole = s }
+func RegisterMenu(s IMenu)         { localMenu = s }
 func RegisterSystem(s ISystem)       { localSystem = s }
+
+func Admin() IAdmin {
+	if localAdmin == nil {
+		panic("Admin service not initialized")
+	}
+	return localAdmin
+}
+
+func Api() IApi {
+	if localApi == nil {
+		panic("Api service not initialized")
+	}
+	return localApi
+}
+
+func Role() IRole {
+	if localRole == nil {
+		panic("Role service not initialized")
+	}
+	return localRole
+}
+
+func Menu() IMenu {
+	if localMenu == nil {
+		panic("Menu service not initialized")
+	}
+	return localMenu
+}
 
 func Warehouse() IWarehouse {
 	if localWarehouse == nil {

@@ -1,69 +1,94 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import { Layout } from '@/utils/routerHelper'
+import { NO_RESET_WHITE_LIST } from '@/constants'
 
-const routes = [
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import('@/views/Login.vue'),
-    meta: { title: '登录' },
-  },
+export const constantRouterMap = [
   {
     path: '/',
-    component: () => import('@/layouts/MainLayout.vue'),
+    component: Layout,
     redirect: '/dashboard',
-    children: [
-      { path: 'dashboard', name: 'Dashboard', component: () => import('@/views/Dashboard.vue'), meta: { title: '仪表盘' } },
-      // 用户管理
-      { path: 'user', name: 'UserList', component: () => import('@/views/user/UserList.vue'), meta: { title: '用户管理' } },
-      { path: 'user/role', name: 'RoleList', component: () => import('@/views/user/RoleList.vue'), meta: { title: '角色管理' } },
-      { path: 'enterprise', name: 'EnterpriseList', component: () => import('@/views/user/EnterpriseList.vue'), meta: { title: '企业管理' } },
-      // 产品溯源
-      { path: 'product', name: 'ProductList', component: () => import('@/views/trace/ProductList.vue'), meta: { title: '产品管理' } },
-      { path: 'product/detail/:id', name: 'ProductDetail', component: () => import('@/views/trace/ProductDetail.vue'), meta: { title: '产品详情' } },
-      { path: 'batch', name: 'BatchList', component: () => import('@/views/trace/BatchList.vue'), meta: { title: '批次管理' } },
-      { path: 'trace-record', name: 'TraceRecordList', component: () => import('@/views/trace/TraceRecordList.vue'), meta: { title: '溯源记录' } },
-      { path: 'trace/chain/:productId', name: 'TraceChain', component: () => import('@/views/trace/TraceChain.vue'), meta: { title: '追溯链' } },
-      // 供应链管理
-      { path: 'supplier', name: 'SupplierList', component: () => import('@/views/supply/SupplierList.vue'), meta: { title: '供应商管理' } },
-      { path: 'order', name: 'OrderList', component: () => import('@/views/supply/OrderList.vue'), meta: { title: '订单管理' } },
-      { path: 'warehouse', name: 'WarehouseList', component: () => import('@/views/supply/WarehouseList.vue'), meta: { title: '仓储管理' } },
-      { path: 'logistics', name: 'LogisticsList', component: () => import('@/views/supply/LogisticsList.vue'), meta: { title: '物流管理' } },
-      // 区块链
-      { path: 'blockchain', name: 'BlockList', component: () => import('@/views/blockchain/BlockList.vue'), meta: { title: '区块浏览器' } },
-      { path: 'blockchain/transaction', name: 'TransactionList', component: () => import('@/views/blockchain/TransactionList.vue'), meta: { title: '交易记录' } },
-      { path: 'blockchain/contract', name: 'ContractList', component: () => import('@/views/blockchain/ContractList.vue'), meta: { title: '合约管理' } },
-      // 仓库管理
-      { path: 'warehouse/list', name: 'WarehouseList', component: () => import('@/views/warehouse/WarehouseList.vue'), meta: { title: '仓库信息' } },
-      { path: 'warehouse-area', name: 'WarehouseArea', component: () => import('@/views/warehouse/WarehouseArea.vue'), meta: { title: '区域货架管理' } },
-      { path: 'stocktake', name: 'StocktakeList', component: () => import('@/views/warehouse/StocktakeList.vue'), meta: { title: '仓库盘存' } },
-      { path: 'car-inventory', name: 'CarList', component: () => import('@/views/inventory/CarList.vue'), meta: { title: '整车库存' } },
-      { path: 'raw-material', name: 'RawMaterialList', component: () => import('@/views/inventory/RawMaterialList.vue'), meta: { title: '原材料库存' } },
-      { path: 'waste', name: 'WasteList', component: () => import('@/views/inventory/WasteList.vue'), meta: { title: '危固废管理' } },
-      { path: 'part-traceable', name: 'PartTraceableList', component: () => import('@/views/inventory/PartTraceableList.vue'), meta: { title: '配件-溯源件' } },
-      { path: 'part-untraceable', name: 'PartUntraceableList', component: () => import('@/views/inventory/PartUntraceableList.vue'), meta: { title: '配件-非溯源件' } },
-      { path: 'inbound', name: 'InboundList', component: () => import('@/views/records/InboundList.vue'), meta: { title: '入库记录' } },
-      { path: 'outbound', name: 'OutboundList', component: () => import('@/views/records/OutboundList.vue'), meta: { title: '出库记录' } },
-      { path: 'transfer', name: 'TransferList', component: () => import('@/views/records/TransferList.vue'), meta: { title: '调拨记录' } },
-      // 系统管理
-      { path: 'config', name: 'ConfigList', component: () => import('@/views/system/ConfigList.vue'), meta: { title: '系统配置' } },
-      { path: 'api-rule', name: 'ApiRuleList', component: () => import('@/views/system/ApiRuleList.vue'), meta: { title: 'API 管理' } },
-      { path: 'logs', name: 'LogList', component: () => import('@/views/system/LogList.vue'), meta: { title: '操作日志' } },
-    ],
+    name: 'Root',
+    meta: { hidden: true }
   },
+  {
+    path: '/redirect',
+    component: Layout,
+    name: 'RedirectLayout',
+    children: [
+      { path: '/redirect/:path(.*)', name: 'Redirect', component: () => import('@/views/Redirect.vue'), meta: {} }
+    ],
+    meta: { hidden: true, noTagsView: true }
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/Login/Login.vue'),
+    name: 'Login',
+    meta: { hidden: true, title: 'Login', noTagsView: true }
+  },
+  {
+    path: '/personal',
+    component: Layout,
+    redirect: '/personal/personal-center',
+    name: 'Personal',
+    meta: { title: 'Personal', hidden: true, canTo: true },
+    children: [
+      { path: 'personal-center', component: () => import('@/views/Personal/PersonalCenter.vue'), name: 'PersonalCenter', meta: { title: 'Personal Center', hidden: true, canTo: true } }
+    ]
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/Error/404.vue'),
+    name: 'NoFind',
+    meta: { hidden: true, title: '404', noTagsView: true }
+  }
+]
+
+export const asyncRouterMap = [
+  {
+    path: '/dashboard',
+    component: Layout,
+    name: 'Dashboard',
+    redirect: '/dashboard/index',
+    meta: { title: 'Dashboard', icon: 'DataBoard', noCache: false, hidden: false },
+    children: [
+      { path: 'index', component: () => import('@/views/Dashboard.vue'), name: 'DashboardIndex', meta: { title: 'Dashboard' } }
+    ]
+  },
+  {
+    path: '/system',
+    component: Layout,
+    name: 'System',
+    redirect: '/system/admin',
+    permission: [],
+    meta: { title: 'System', icon: '', noCache: false, hidden: false },
+    children: [
+      { path: 'admin', component: () => import('@/views/System/admin/SysAdmin.vue'), name: 'SysAdmin', permission: ['SysAdminAdd', 'SysAdminDel', 'SysAdminEdit', 'SysAdminPassword', 'SysAdminFreeze', 'SysAdminList', 'SysAdminClickOut'], meta: { title: 'Admin', icon: 'user', noCache: false, hidden: false } },
+      { path: 'api', component: () => import('@/views/System/api/SysApi.vue'), name: 'SysApi', permission: ['SysApiAdd', 'SysApiDel', 'SysApiEdit', 'SysApiList'], meta: { title: 'API', icon: 'api', noCache: false, hidden: false } },
+      { path: 'role', component: () => import('@/views/System/role/SysRole.vue'), name: 'SysRole', permission: ['SysRoleAdd', 'SysRoleDel', 'SysRoleStatus', 'SysRoleEdit', 'SysRoleInfo', 'SysRoleList'], meta: { title: 'Roles', icon: 'peoples', noCache: false, hidden: false } },
+      { path: 'dept', component: () => import('@/views/System/dept/SysDept.vue'), name: 'SysDept', permission: ['SysDeptAdd', 'SysDeptDel', 'SysDeptEdit', 'SysDeptInfo', 'SysDeptList'], meta: { title: 'Dept', icon: 'tree', noCache: false, hidden: false } },
+      { path: 'menu', component: () => import('@/views/System/menu/SysMenu.vue'), name: 'SysMenu', permission: ['SysMenuAdd', 'SysMenuDel', 'SysMenuEdit', 'SysMenuInfo', 'SysMenuList', 'SysMenuDrop'], meta: { title: 'Menu', icon: 'tree-table', noCache: false, hidden: false } }
+    ]
+  }
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+  history: createWebHashHistory(),
+  strict: true,
+  routes: constantRouterMap,
+  scrollBehavior: () => ({ left: 0, top: 0 })
 })
 
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
-  if (to.name !== 'Login' && !token) {
-    next({ name: 'Login' })
-  } else {
-    next()
-  }
-})
+export const resetRouter = () => {
+  router.getRoutes().forEach((route) => {
+    const { name } = route
+    if (name && !NO_RESET_WHITE_LIST.includes(name)) {
+      router.hasRoute(name) && router.removeRoute(name)
+    }
+  })
+}
+
+export const setupRouter = (app) => {
+  app.use(router)
+}
 
 export default router

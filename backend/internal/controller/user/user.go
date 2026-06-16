@@ -3,7 +3,7 @@ package user
 import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
-	"cl_system/internal/model"
+	userV1 "cl_system/api/user/v1"
 	"cl_system/internal/service"
 )
 
@@ -11,12 +11,12 @@ type Controller struct{}
 var Ctl = &Controller{}
 
 func (c *Controller) Login(r *ghttp.Request) {
-	var req model.UserLoginInput
+	var req userV1.LoginReq
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	result, err := service.User().Login(r.Context(), req)
+	result, err := service.User().Login(r.Context(), req.UserLoginInput)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -25,12 +25,12 @@ func (c *Controller) Login(r *ghttp.Request) {
 }
 
 func (c *Controller) Register(r *ghttp.Request) {
-	var req model.UserRegisterInput
+	var req userV1.RegisterReq
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.User().Register(r.Context(), req)
+	err := service.User().Register(r.Context(), req.UserRegisterInput)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -53,24 +53,26 @@ func (c *Controller) GetUserInfo(r *ghttp.Request) {
 }
 
 func (c *Controller) GetUserList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	users, total, err := service.User().GetUserList(r.Context(), page, pageSize)
+	var req userV1.UserListReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	users, total, err := service.User().GetUserList(r.Context(), req.Page, req.PageSize)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": users, "total": total, "page": page, "pageSize": pageSize}})
+	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": users, "total": total, "page": req.Page, "pageSize": req.PageSize}})
 }
 
 func (c *Controller) UpdateUser(r *ghttp.Request) {
-	userId := r.GetCtxVar("userId").Uint()
-	var data map[string]interface{}
-	if err := r.Parse(&data); err != nil {
+	var req userV1.UserUpdateReq
+	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.User().UpdateUser(r.Context(), userId, data)
+	err := service.User().UpdateUser(r.Context(), req.Id, req.Data)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -79,8 +81,12 @@ func (c *Controller) UpdateUser(r *ghttp.Request) {
 }
 
 func (c *Controller) DeleteUser(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	err := service.User().DeleteUser(r.Context(), id)
+	var req userV1.UserDeleteReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.User().DeleteUser(r.Context(), req.Id)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -98,12 +104,12 @@ func (c *Controller) GetRoleList(r *ghttp.Request) {
 }
 
 func (c *Controller) CreateRole(r *ghttp.Request) {
-	var role model.RoleInfo
-	if err := r.Parse(&role); err != nil {
+	var req userV1.RoleCreateReq
+	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.User().CreateRole(r.Context(), role)
+	err := service.User().CreateRole(r.Context(), req.RoleInfo)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -112,12 +118,12 @@ func (c *Controller) CreateRole(r *ghttp.Request) {
 }
 
 func (c *Controller) UpdateRole(r *ghttp.Request) {
-	var role model.RoleInfo
-	if err := r.Parse(&role); err != nil {
+	var req userV1.RoleUpdateReq
+	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.User().UpdateRole(r.Context(), role)
+	err := service.User().UpdateRole(r.Context(), req.RoleInfo)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -126,8 +132,12 @@ func (c *Controller) UpdateRole(r *ghttp.Request) {
 }
 
 func (c *Controller) DeleteRole(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	err := service.User().DeleteRole(r.Context(), id)
+	var req userV1.RoleDeleteReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.User().DeleteRole(r.Context(), req.Id)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -136,9 +146,12 @@ func (c *Controller) DeleteRole(r *ghttp.Request) {
 }
 
 func (c *Controller) GetEnterpriseList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	list, total, err := service.User().GetEnterpriseList(r.Context(), page, pageSize)
+	var req userV1.EnterpriseListReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	list, total, err := service.User().GetEnterpriseList(r.Context(), req.Page, req.PageSize)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -147,12 +160,12 @@ func (c *Controller) GetEnterpriseList(r *ghttp.Request) {
 }
 
 func (c *Controller) CreateEnterprise(r *ghttp.Request) {
-	var ent model.EnterpriseInfo
-	if err := r.Parse(&ent); err != nil {
+	var req userV1.EnterpriseCreateReq
+	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.User().CreateEnterprise(r.Context(), ent)
+	err := service.User().CreateEnterprise(r.Context(), req.EnterpriseInfo)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -161,12 +174,12 @@ func (c *Controller) CreateEnterprise(r *ghttp.Request) {
 }
 
 func (c *Controller) UpdateEnterprise(r *ghttp.Request) {
-	var ent model.EnterpriseInfo
-	if err := r.Parse(&ent); err != nil {
+	var req userV1.EnterpriseUpdateReq
+	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.User().UpdateEnterprise(r.Context(), ent)
+	err := service.User().UpdateEnterprise(r.Context(), req.EnterpriseInfo)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return

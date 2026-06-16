@@ -2,7 +2,11 @@ module cl_system
 
 go 1.22
 
-require github.com/gogf/gf/v2 v2.5.6
+require (
+	github.com/dustin/go-humanize v1.0.1
+	github.com/gogf/gf/v2 v2.5.6
+	github.com/shopspring/decimal v1.3.1
+)
 
 require (
 	github.com/BurntSushi/toml v1.2.0 // indirect

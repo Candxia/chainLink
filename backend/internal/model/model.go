@@ -199,6 +199,28 @@ type DashboardData struct {
 	ActiveContracts    int `json:"activeContracts"`
 }
 
+// ==================== 分页信息 ====================
+
+type PageInfo struct {
+	Page   int   `json:"page"  default:"1"  v:"required|min:1"`
+	Limit  int   `json:"limit" default:"20" v:"required|min:10|max:1000"`
+	Cursor int64 `json:"cursor,omitempty" default:"0"`
+}
+
+func (p *PageInfo) Paginate() (limit, offset int) {
+	limit = p.Limit
+	offset = p.Limit * (p.Page - 1)
+	return limit, offset
+}
+
+func (p *PageInfo) MaxPage(total int) (page int) {
+	page = total / p.Limit
+	if total%p.Limit != 0 {
+		page += 1
+	}
+	return page
+}
+
 // ==================== 仓库管理 数据模型 ====================
 
 type WarehouseInfo struct {

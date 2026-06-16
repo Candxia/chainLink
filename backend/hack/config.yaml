@@ -1,0 +1,12 @@
+# GoFrame CLI 工具配置
+# 用于 gf gen dao 等命令自动生成代码
+gfcli:
+  gen:
+    dao:
+      - link: "mysql:root:123456@tcp(127.0.0.1:3306)/cl_system"
+        tables: ""
+        group: "default"
+        descriptionTag: true
+        noModelComment: true
+        jsonCase: SnakeFirstUpper
+        path: "./internal"

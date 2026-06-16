@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"cl_system/internal/controller/user"
 	"cl_system/internal/controller/trace"
@@ -95,6 +94,51 @@ func Router(group *ghttp.RouterGroup) {
 	sysGroup.GET("/notifications", system.Ctl.GetNotificationList)
 	sysGroup.POST("/notification/read/:id", system.Ctl.MarkNotificationRead)
 
+	// ==================== 账号管理 ====================
+	sysGroup.POST("/admin/add", system.Ctl.AdminAdd)
+	sysGroup.DELETE("/admin/del", system.Ctl.AdminDel)
+	sysGroup.PUT("/admin/edit", system.Ctl.AdminEdit)
+	sysGroup.GET("/admin/info", system.Ctl.AdminInfo)
+	sysGroup.GET("/admin/list", system.Ctl.AdminList)
+	sysGroup.PUT("/admin/password", system.Ctl.AdminPassword)
+	sysGroup.PUT("/admin/status", system.Ctl.AdminStatus)
+	sysGroup.PUT("/admin/clickout", system.Ctl.AdminClickOut)
+
+	// ==================== API管理 ====================
+	sysGroup.POST("/api/add", system.Ctl.ApiAdd)
+	sysGroup.DELETE("/api/del", system.Ctl.ApiDel)
+	sysGroup.PUT("/api/edit", system.Ctl.ApiEdit)
+	sysGroup.GET("/api/list", system.Ctl.ApiList)
+	sysGroup.GET("/api/dropdown", system.Ctl.ApiDrop)
+	sysGroup.GET("/api/path", system.Ctl.ApiPath)
+
+	// ==================== 角色管理 ====================
+	sysGroup.POST("/role/add", system.Ctl.RoleAdd)
+	sysGroup.DELETE("/role/del", system.Ctl.RoleDel)
+	sysGroup.PUT("/role/edit", system.Ctl.RoleEdit)
+	sysGroup.PUT("/role/status", system.Ctl.RoleStatus)
+	sysGroup.GET("/role/info", system.Ctl.RoleInfo)
+	sysGroup.GET("/role/list", system.Ctl.RoleList)
+	sysGroup.GET("/role/dropdown", system.Ctl.RoleDrop)
+	sysGroup.PUT("/role/is_mobile", system.Ctl.RoleIsMobile)
+
+	// ==================== 菜单管理 ====================
+	sysGroup.POST("/menu/add", system.Ctl.MenuAdd)
+	sysGroup.DELETE("/menu/del", system.Ctl.MenuDel)
+	sysGroup.PUT("/menu/edit", system.Ctl.MenuEdit)
+	sysGroup.GET("/menu/info", system.Ctl.MenuInfo)
+	sysGroup.GET("/menu/list", system.Ctl.MenuList)
+	sysGroup.GET("/menu/role", system.Ctl.MenuRole)
+	sysGroup.GET("/menu/dropdown", system.Ctl.MenuDrop)
+
+	// ==================== 部门管理 ====================
+	sysGroup.POST("/dept/add", system.Ctl.DeptAdd)
+	sysGroup.DELETE("/dept/del", system.Ctl.DeptDel)
+	sysGroup.PUT("/dept/edit", system.Ctl.DeptEdit)
+	sysGroup.GET("/dept/info", system.Ctl.DeptInfo)
+	sysGroup.GET("/dept/list", system.Ctl.DeptList)
+	sysGroup.GET("/dept/dropdown", system.Ctl.DeptDrop)
+
 	// ==================== 仓库管理 ====================
 	warehouseGroup := group.Group("/warehouse")
 	warehouseGroup.Middleware(AuthMiddleware)
@@ -157,11 +201,4 @@ func Router(group *ghttp.RouterGroup) {
 	group.Group("/upload").Middleware(AuthMiddleware).POST("/", system.Ctl.UploadFile)
 }
 
-func AuthMiddleware(r *ghttp.Request) {
-	token := r.GetHeader("Authorization")
-	if token == "" {
-		r.Response.WriteJson(g.Map{"code": 401, "message": "未登录"})
-		r.Exit()
-	}
-	r.Middleware.Next()
-}
+

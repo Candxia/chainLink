@@ -3,7 +3,7 @@ package warehouse
 import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
-	"cl_system/internal/model"
+	warehouseV1 "cl_system/api/warehouse/v1"
 	"cl_system/internal/service"
 )
 
@@ -14,24 +14,26 @@ var Ctl = &Controller{}
 // ==================== 仓库信息 ====================
 
 func (c *Controller) GetWarehouseList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	name := r.GetQuery("name").String()
-	list, total, err := service.Warehouse().GetWarehouseList(r.Context(), page, pageSize, name)
-	if err != nil {
-		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
-		return
-	}
-	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": page, "pageSize": pageSize}})
-}
-
-func (c *Controller) CreateWarehouse(r *ghttp.Request) {
-	var req model.WarehouseCreateInput
+	var req warehouseV1.GetWarehouseListReq
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.Warehouse().CreateWarehouse(r.Context(), req)
+	list, total, err := service.Warehouse().GetWarehouseList(r.Context(), req.Page, req.PageSize, req.Name)
+	if err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": req.Page, "pageSize": req.PageSize}})
+}
+
+func (c *Controller) CreateWarehouse(r *ghttp.Request) {
+	var req warehouseV1.CreateWarehouseReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.Warehouse().CreateWarehouse(r.Context(), *req.WarehouseCreateInput)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -40,12 +42,12 @@ func (c *Controller) CreateWarehouse(r *ghttp.Request) {
 }
 
 func (c *Controller) UpdateWarehouse(r *ghttp.Request) {
-	var req model.WarehouseUpdateInput
+	var req warehouseV1.UpdateWarehouseReq
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.Warehouse().UpdateWarehouse(r.Context(), req)
+	err := service.Warehouse().UpdateWarehouse(r.Context(), *req.WarehouseUpdateInput)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -54,8 +56,12 @@ func (c *Controller) UpdateWarehouse(r *ghttp.Request) {
 }
 
 func (c *Controller) DeleteWarehouse(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	err := service.Warehouse().DeleteWarehouse(r.Context(), id)
+	var req warehouseV1.DeleteWarehouseReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.Warehouse().DeleteWarehouse(r.Context(), req.Id)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -64,9 +70,12 @@ func (c *Controller) DeleteWarehouse(r *ghttp.Request) {
 }
 
 func (c *Controller) UpdateWarehouseStatus(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	status := r.Get("status").Int()
-	err := service.Warehouse().UpdateWarehouseStatus(r.Context(), id, status)
+	var req warehouseV1.UpdateWarehouseStatusReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.Warehouse().UpdateWarehouseStatus(r.Context(), req.Id, req.Status)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -77,8 +86,12 @@ func (c *Controller) UpdateWarehouseStatus(r *ghttp.Request) {
 // ==================== 区域 ====================
 
 func (c *Controller) GetAreaList(r *ghttp.Request) {
-	warehouseId := r.GetQuery("warehouseId", 0).Uint()
-	list, err := service.Warehouse().GetAreaList(r.Context(), warehouseId)
+	var req warehouseV1.GetAreaListReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	list, err := service.Warehouse().GetAreaList(r.Context(), req.WarehouseId)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -87,12 +100,12 @@ func (c *Controller) GetAreaList(r *ghttp.Request) {
 }
 
 func (c *Controller) CreateArea(r *ghttp.Request) {
-	var req model.WarehouseAreaCreateInput
+	var req warehouseV1.CreateAreaReq
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.Warehouse().CreateArea(r.Context(), req)
+	err := service.Warehouse().CreateArea(r.Context(), *req.WarehouseAreaCreateInput)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -101,8 +114,12 @@ func (c *Controller) CreateArea(r *ghttp.Request) {
 }
 
 func (c *Controller) DeleteArea(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	err := service.Warehouse().DeleteArea(r.Context(), id)
+	var req warehouseV1.DeleteAreaReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.Warehouse().DeleteArea(r.Context(), req.Id)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -113,8 +130,12 @@ func (c *Controller) DeleteArea(r *ghttp.Request) {
 // ==================== 货架 ====================
 
 func (c *Controller) GetShelfList(r *ghttp.Request) {
-	areaId := r.GetQuery("areaId", 0).Uint()
-	list, err := service.Warehouse().GetShelfList(r.Context(), areaId)
+	var req warehouseV1.GetShelfListReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	list, err := service.Warehouse().GetShelfList(r.Context(), req.AreaId)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -123,12 +144,12 @@ func (c *Controller) GetShelfList(r *ghttp.Request) {
 }
 
 func (c *Controller) CreateShelf(r *ghttp.Request) {
-	var req model.WarehouseShelfCreateInput
+	var req warehouseV1.CreateShelfReq
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.Warehouse().CreateShelf(r.Context(), req)
+	err := service.Warehouse().CreateShelf(r.Context(), *req.WarehouseShelfCreateInput)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -137,8 +158,12 @@ func (c *Controller) CreateShelf(r *ghttp.Request) {
 }
 
 func (c *Controller) DeleteShelf(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	err := service.Warehouse().DeleteShelf(r.Context(), id)
+	var req warehouseV1.DeleteShelfReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.Warehouse().DeleteShelf(r.Context(), req.Id)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -149,24 +174,26 @@ func (c *Controller) DeleteShelf(r *ghttp.Request) {
 // ==================== 盘存 ====================
 
 func (c *Controller) GetStocktakeList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	warehouseId := r.GetQuery("warehouseId", 0).Uint()
-	list, total, err := service.Warehouse().GetStocktakeList(r.Context(), page, pageSize, warehouseId)
-	if err != nil {
-		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
-		return
-	}
-	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": page, "pageSize": pageSize}})
-}
-
-func (c *Controller) CreateStocktake(r *ghttp.Request) {
-	var req model.StocktakeCreateInput
+	var req warehouseV1.GetStocktakeListReq
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.Warehouse().CreateStocktake(r.Context(), req)
+	list, total, err := service.Warehouse().GetStocktakeList(r.Context(), req.Page, req.PageSize, req.WarehouseId)
+	if err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": req.Page, "pageSize": req.PageSize}})
+}
+
+func (c *Controller) CreateStocktake(r *ghttp.Request) {
+	var req warehouseV1.CreateStocktakeReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.Warehouse().CreateStocktake(r.Context(), *req.StocktakeCreateInput)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -177,41 +204,42 @@ func (c *Controller) CreateStocktake(r *ghttp.Request) {
 // ==================== 整车库存 ====================
 
 func (c *Controller) GetInventoryCarList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	warehouseId := r.GetQuery("warehouseId", 0).Uint()
-	brand := r.GetQuery("brand").String()
-	modelName := r.GetQuery("model").String()
-	vin := r.GetQuery("vin").String()
-	list, total, err := service.Warehouse().GetInventoryCarList(r.Context(), page, pageSize, warehouseId, brand, modelName, vin)
+	var req warehouseV1.GetInventoryCarListReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	list, total, err := service.Warehouse().GetInventoryCarList(r.Context(), req.Page, req.PageSize, req.WarehouseId, req.Brand, req.ModelName, req.Vin)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": page, "pageSize": pageSize}})
+	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": req.Page, "pageSize": req.PageSize}})
 }
 
 // ==================== 原材料库存 ====================
 
 func (c *Controller) GetRawMaterialList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	warehouseId := r.GetQuery("warehouseId", 0).Uint()
-	list, total, err := service.Warehouse().GetRawMaterialList(r.Context(), page, pageSize, warehouseId)
-	if err != nil {
-		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
-		return
-	}
-	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": page, "pageSize": pageSize}})
-}
-
-func (c *Controller) RawMaterialIn(r *ghttp.Request) {
-	var req model.RawMaterialInInput
+	var req warehouseV1.GetRawMaterialListReq
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.Warehouse().RawMaterialIn(r.Context(), req)
+	list, total, err := service.Warehouse().GetRawMaterialList(r.Context(), req.Page, req.PageSize, req.WarehouseId)
+	if err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": req.Page, "pageSize": req.PageSize}})
+}
+
+func (c *Controller) RawMaterialIn(r *ghttp.Request) {
+	var req warehouseV1.RawMaterialInReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.Warehouse().RawMaterialIn(r.Context(), *req.RawMaterialInInput)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -220,12 +248,12 @@ func (c *Controller) RawMaterialIn(r *ghttp.Request) {
 }
 
 func (c *Controller) RawMaterialOut(r *ghttp.Request) {
-	var req model.RawMaterialOutInput
+	var req warehouseV1.RawMaterialOutReq
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.Warehouse().RawMaterialOut(r.Context(), req)
+	err := service.Warehouse().RawMaterialOut(r.Context(), *req.RawMaterialOutInput)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -236,24 +264,26 @@ func (c *Controller) RawMaterialOut(r *ghttp.Request) {
 // ==================== 危固废库存 ====================
 
 func (c *Controller) GetWasteList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	warehouseId := r.GetQuery("warehouseId", 0).Uint()
-	list, total, err := service.Warehouse().GetWasteList(r.Context(), page, pageSize, warehouseId)
-	if err != nil {
-		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
-		return
-	}
-	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": page, "pageSize": pageSize}})
-}
-
-func (c *Controller) WasteIn(r *ghttp.Request) {
-	var req model.WasteInInput
+	var req warehouseV1.GetWasteListReq
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.Warehouse().WasteIn(r.Context(), req)
+	list, total, err := service.Warehouse().GetWasteList(r.Context(), req.Page, req.PageSize, req.WarehouseId)
+	if err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": req.Page, "pageSize": req.PageSize}})
+}
+
+func (c *Controller) WasteIn(r *ghttp.Request) {
+	var req warehouseV1.WasteInReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.Warehouse().WasteIn(r.Context(), *req.WasteInInput)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -264,25 +294,26 @@ func (c *Controller) WasteIn(r *ghttp.Request) {
 // ==================== 溯源件 ====================
 
 func (c *Controller) GetPartTraceableList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	warehouseId := r.GetQuery("warehouseId", 0).Uint()
-	partName := r.GetQuery("partName").String()
-	list, total, err := service.Warehouse().GetPartTraceableList(r.Context(), page, pageSize, warehouseId, partName)
-	if err != nil {
-		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
-		return
-	}
-	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": page, "pageSize": pageSize}})
-}
-
-func (c *Controller) PartTraceableOut(r *ghttp.Request) {
-	var req model.PartTraceableOutInput
+	var req warehouseV1.GetPartTraceableListReq
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.Warehouse().PartTraceableOut(r.Context(), req)
+	list, total, err := service.Warehouse().GetPartTraceableList(r.Context(), req.Page, req.PageSize, req.WarehouseId, req.PartName)
+	if err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": req.Page, "pageSize": req.PageSize}})
+}
+
+func (c *Controller) PartTraceableOut(r *ghttp.Request) {
+	var req warehouseV1.PartTraceableOutReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.Warehouse().PartTraceableOut(r.Context(), *req.PartTraceableOutInput)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -293,24 +324,26 @@ func (c *Controller) PartTraceableOut(r *ghttp.Request) {
 // ==================== 非溯源件 ====================
 
 func (c *Controller) GetPartUntraceableList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	warehouseId := r.GetQuery("warehouseId", 0).Uint()
-	list, total, err := service.Warehouse().GetPartUntraceableList(r.Context(), page, pageSize, warehouseId)
-	if err != nil {
-		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
-		return
-	}
-	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": page, "pageSize": pageSize}})
-}
-
-func (c *Controller) PartUntraceableIn(r *ghttp.Request) {
-	var req model.PartUntraceableInInput
+	var req warehouseV1.GetPartUntraceableListReq
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.Warehouse().PartUntraceableIn(r.Context(), req)
+	list, total, err := service.Warehouse().GetPartUntraceableList(r.Context(), req.Page, req.PageSize, req.WarehouseId)
+	if err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": req.Page, "pageSize": req.PageSize}})
+}
+
+func (c *Controller) PartUntraceableIn(r *ghttp.Request) {
+	var req warehouseV1.PartUntraceableInReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.Warehouse().PartUntraceableIn(r.Context(), *req.PartUntraceableInInput)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -319,12 +352,12 @@ func (c *Controller) PartUntraceableIn(r *ghttp.Request) {
 }
 
 func (c *Controller) PartUntraceableOut(r *ghttp.Request) {
-	var req model.PartUntraceableOutInput
+	var req warehouseV1.PartUntraceableOutReq
 	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.Warehouse().PartUntraceableOut(r.Context(), req)
+	err := service.Warehouse().PartUntraceableOut(r.Context(), *req.PartUntraceableOutInput)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -335,21 +368,26 @@ func (c *Controller) PartUntraceableOut(r *ghttp.Request) {
 // ==================== 操作记录 ====================
 
 func (c *Controller) GetInboundRecordList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	inboundType := r.GetQuery("inboundType").String()
-	warehouseId := r.GetQuery("warehouseId", 0).Uint()
-	list, total, err := service.Warehouse().GetInboundRecordList(r.Context(), page, pageSize, inboundType, warehouseId)
+	var req warehouseV1.GetInboundRecordListReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	list, total, err := service.Warehouse().GetInboundRecordList(r.Context(), req.Page, req.PageSize, req.InboundType, req.WarehouseId)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": page, "pageSize": pageSize}})
+	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": req.Page, "pageSize": req.PageSize}})
 }
 
 func (c *Controller) GetInboundRecordDetail(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	detail, err := service.Warehouse().GetInboundRecordDetail(r.Context(), id)
+	var req warehouseV1.GetInboundRecordDetailReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	detail, err := service.Warehouse().GetInboundRecordDetail(r.Context(), req.Id)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -358,21 +396,26 @@ func (c *Controller) GetInboundRecordDetail(r *ghttp.Request) {
 }
 
 func (c *Controller) GetOutboundRecordList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	outboundType := r.GetQuery("outboundType").String()
-	warehouseId := r.GetQuery("warehouseId", 0).Uint()
-	list, total, err := service.Warehouse().GetOutboundRecordList(r.Context(), page, pageSize, outboundType, warehouseId)
+	var req warehouseV1.GetOutboundRecordListReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	list, total, err := service.Warehouse().GetOutboundRecordList(r.Context(), req.Page, req.PageSize, req.OutboundType, req.WarehouseId)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": page, "pageSize": pageSize}})
+	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": req.Page, "pageSize": req.PageSize}})
 }
 
 func (c *Controller) GetOutboundRecordDetail(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	detail, err := service.Warehouse().GetOutboundRecordDetail(r.Context(), id)
+	var req warehouseV1.GetOutboundRecordDetailReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	detail, err := service.Warehouse().GetOutboundRecordDetail(r.Context(), req.Id)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -381,20 +424,26 @@ func (c *Controller) GetOutboundRecordDetail(r *ghttp.Request) {
 }
 
 func (c *Controller) GetTransferRecordList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	transferType := r.GetQuery("transferType").String()
-	list, total, err := service.Warehouse().GetTransferRecordList(r.Context(), page, pageSize, transferType)
+	var req warehouseV1.GetTransferRecordListReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	list, total, err := service.Warehouse().GetTransferRecordList(r.Context(), req.Page, req.PageSize, req.TransferType)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": page, "pageSize": pageSize}})
+	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": req.Page, "pageSize": req.PageSize}})
 }
 
 func (c *Controller) GetTransferRecordDetail(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	detail, err := service.Warehouse().GetTransferRecordDetail(r.Context(), id)
+	var req warehouseV1.GetTransferRecordDetailReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	detail, err := service.Warehouse().GetTransferRecordDetail(r.Context(), req.Id)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return

@@ -3,6 +3,7 @@ package blockchain
 import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
+	blockchainV1 "cl_system/api/blockchain/v1"
 	"cl_system/internal/service"
 )
 
@@ -10,9 +11,12 @@ type Controller struct{}
 var Ctl = &Controller{}
 
 func (c *Controller) GetBlockList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	blocks, total, err := service.Blockchain().GetBlockList(r.Context(), page, pageSize)
+	var req blockchainV1.GetBlockListReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	blocks, total, err := service.Blockchain().GetBlockList(r.Context(), req.Page, req.PageSize)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -21,8 +25,12 @@ func (c *Controller) GetBlockList(r *ghttp.Request) {
 }
 
 func (c *Controller) GetBlockByHash(r *ghttp.Request) {
-	hash := r.Get("hash").String()
-	block, err := service.Blockchain().GetBlockByHash(r.Context(), hash)
+	var req blockchainV1.GetBlockByHashReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	block, err := service.Blockchain().GetBlockByHash(r.Context(), req.Hash)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -31,9 +39,12 @@ func (c *Controller) GetBlockByHash(r *ghttp.Request) {
 }
 
 func (c *Controller) GetTransactionList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	txs, total, err := service.Blockchain().GetTransactionList(r.Context(), page, pageSize)
+	var req blockchainV1.GetTransactionListReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	txs, total, err := service.Blockchain().GetTransactionList(r.Context(), req.Page, req.PageSize)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -42,8 +53,12 @@ func (c *Controller) GetTransactionList(r *ghttp.Request) {
 }
 
 func (c *Controller) GetTransactionDetail(r *ghttp.Request) {
-	txId := r.Get("txId").String()
-	tx, err := service.Blockchain().GetTransactionDetail(r.Context(), txId)
+	var req blockchainV1.GetTransactionDetailReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	tx, err := service.Blockchain().GetTransactionDetail(r.Context(), req.TxId)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -52,12 +67,12 @@ func (c *Controller) GetTransactionDetail(r *ghttp.Request) {
 }
 
 func (c *Controller) DeployContract(r *ghttp.Request) {
-	var data map[string]interface{}
-	if err := r.Parse(&data); err != nil {
+	var req blockchainV1.DeployContractReq
+	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	contract, err := service.Blockchain().DeployContract(r.Context(), data)
+	contract, err := service.Blockchain().DeployContract(r.Context(), req.Data)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -66,8 +81,12 @@ func (c *Controller) DeployContract(r *ghttp.Request) {
 }
 
 func (c *Controller) GetContractInfo(r *ghttp.Request) {
-	address := r.Get("address").String()
-	contract, err := service.Blockchain().GetContractInfo(r.Context(), address)
+	var req blockchainV1.GetContractInfoReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	contract, err := service.Blockchain().GetContractInfo(r.Context(), req.Address)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -85,12 +104,12 @@ func (c *Controller) GetContractList(r *ghttp.Request) {
 }
 
 func (c *Controller) UploadToChain(r *ghttp.Request) {
-	var data map[string]interface{}
-	if err := r.Parse(&data); err != nil {
+	var req blockchainV1.UploadToChainReq
+	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	result, err := service.Blockchain().UploadToChain(r.Context(), data)
+	result, err := service.Blockchain().UploadToChain(r.Context(), req.Data)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -99,9 +118,12 @@ func (c *Controller) UploadToChain(r *ghttp.Request) {
 }
 
 func (c *Controller) VerifyData(r *ghttp.Request) {
-	hash := r.GetQuery("hash").String()
-	txId := r.GetQuery("txId").String()
-	result, err := service.Blockchain().VerifyData(r.Context(), hash, txId)
+	var req blockchainV1.VerifyDataReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	result, err := service.Blockchain().VerifyData(r.Context(), req.Hash, req.TxId)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return

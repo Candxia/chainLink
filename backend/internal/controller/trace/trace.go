@@ -3,6 +3,7 @@ package trace
 import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
+	traceV1 "cl_system/api/trace/v1"
 	"cl_system/internal/service"
 )
 
@@ -10,12 +11,12 @@ type Controller struct{}
 var Ctl = &Controller{}
 
 func (c *Controller) CreateProduct(r *ghttp.Request) {
-	var data map[string]interface{}
-	if err := r.Parse(&data); err != nil {
+	var req traceV1.CreateProductReq
+	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	id, err := service.Trace().CreateProduct(r.Context(), data)
+	id, err := service.Trace().CreateProduct(r.Context(), req.Data)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -24,12 +25,12 @@ func (c *Controller) CreateProduct(r *ghttp.Request) {
 }
 
 func (c *Controller) UpdateProduct(r *ghttp.Request) {
-	var data map[string]interface{}
-	if err := r.Parse(&data); err != nil {
+	var req traceV1.UpdateProductReq
+	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.Trace().UpdateProduct(r.Context(), data)
+	err := service.Trace().UpdateProduct(r.Context(), req.Data)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -38,8 +39,12 @@ func (c *Controller) UpdateProduct(r *ghttp.Request) {
 }
 
 func (c *Controller) DeleteProduct(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	err := service.Trace().DeleteProduct(r.Context(), id)
+	var req traceV1.DeleteProductReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.Trace().DeleteProduct(r.Context(), req.Id)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -48,8 +53,12 @@ func (c *Controller) DeleteProduct(r *ghttp.Request) {
 }
 
 func (c *Controller) GetProduct(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	product, err := service.Trace().GetProduct(r.Context(), id)
+	var req traceV1.GetProductReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	product, err := service.Trace().GetProduct(r.Context(), req.Id)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -58,25 +67,26 @@ func (c *Controller) GetProduct(r *ghttp.Request) {
 }
 
 func (c *Controller) GetProductList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	name := r.GetQuery("name").String()
-	category := r.GetQuery("category").String()
-	list, total, err := service.Trace().GetProductList(r.Context(), page, pageSize, name, category)
+	var req traceV1.GetProductListReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	list, total, err := service.Trace().GetProductList(r.Context(), req.Page, req.PageSize, req.Name, req.Category)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": page, "pageSize": pageSize}})
+	r.Response.WriteJson(g.Map{"code": 0, "data": g.Map{"list": list, "total": total, "page": req.Page, "pageSize": req.PageSize}})
 }
 
 func (c *Controller) CreateBatch(r *ghttp.Request) {
-	var data map[string]interface{}
-	if err := r.Parse(&data); err != nil {
+	var req traceV1.CreateBatchReq
+	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	id, err := service.Trace().CreateBatch(r.Context(), data)
+	id, err := service.Trace().CreateBatch(r.Context(), req.Data)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -85,8 +95,12 @@ func (c *Controller) CreateBatch(r *ghttp.Request) {
 }
 
 func (c *Controller) GetBatch(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	batch, err := service.Trace().GetBatch(r.Context(), id)
+	var req traceV1.GetBatchReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	batch, err := service.Trace().GetBatch(r.Context(), req.Id)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -95,10 +109,12 @@ func (c *Controller) GetBatch(r *ghttp.Request) {
 }
 
 func (c *Controller) GetBatchList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 10).Int()
-	productId := r.GetQuery("productId").Uint()
-	list, total, err := service.Trace().GetBatchList(r.Context(), page, pageSize, productId)
+	var req traceV1.GetBatchListReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	list, total, err := service.Trace().GetBatchList(r.Context(), req.Page, req.PageSize, req.ProductId)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -107,12 +123,12 @@ func (c *Controller) GetBatchList(r *ghttp.Request) {
 }
 
 func (c *Controller) CreateTraceRecord(r *ghttp.Request) {
-	var data map[string]interface{}
-	if err := r.Parse(&data); err != nil {
+	var req traceV1.CreateTraceRecordReq
+	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	record, err := service.Trace().CreateTraceRecord(r.Context(), data)
+	record, err := service.Trace().CreateTraceRecord(r.Context(), req.Data)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -121,8 +137,12 @@ func (c *Controller) CreateTraceRecord(r *ghttp.Request) {
 }
 
 func (c *Controller) GetTraceRecord(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	record, err := service.Trace().GetTraceRecord(r.Context(), id)
+	var req traceV1.GetTraceRecordReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	record, err := service.Trace().GetTraceRecord(r.Context(), req.Id)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -131,8 +151,12 @@ func (c *Controller) GetTraceRecord(r *ghttp.Request) {
 }
 
 func (c *Controller) GetTraceRecordList(r *ghttp.Request) {
-	productId := r.Get("productId").Uint()
-	records, err := service.Trace().GetTraceRecordList(r.Context(), productId)
+	var req traceV1.GetTraceRecordListReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	records, err := service.Trace().GetTraceRecordList(r.Context(), req.ProductId)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -141,8 +165,12 @@ func (c *Controller) GetTraceRecordList(r *ghttp.Request) {
 }
 
 func (c *Controller) GetTraceChain(r *ghttp.Request) {
-	productId := r.Get("productId").Uint()
-	chain, err := service.Trace().GetTraceChain(r.Context(), productId)
+	var req traceV1.GetTraceChainReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	chain, err := service.Trace().GetTraceChain(r.Context(), req.ProductId)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -151,8 +179,12 @@ func (c *Controller) GetTraceChain(r *ghttp.Request) {
 }
 
 func (c *Controller) GenerateQRCode(r *ghttp.Request) {
-	productId := r.Get("productId").Uint()
-	qrcode, err := service.Trace().GenerateQRCode(r.Context(), productId)
+	var req traceV1.GenerateQRCodeReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	qrcode, err := service.Trace().GenerateQRCode(r.Context(), req.ProductId)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -161,8 +193,12 @@ func (c *Controller) GenerateQRCode(r *ghttp.Request) {
 }
 
 func (c *Controller) PublicQuery(r *ghttp.Request) {
-	query := r.GetQuery("q").String()
-	result, err := service.Trace().PublicQuery(r.Context(), query)
+	var req traceV1.PublicQueryReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	result, err := service.Trace().PublicQuery(r.Context(), req.Q)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return

@@ -3,6 +3,7 @@ package system
 import (
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
+	systemV1 "cl_system/api/system/v1"
 	"cl_system/internal/service"
 )
 
@@ -28,12 +29,12 @@ func (c *Controller) GetConfig(r *ghttp.Request) {
 }
 
 func (c *Controller) UpdateConfig(r *ghttp.Request) {
-	var data map[string]interface{}
-	if err := r.Parse(&data); err != nil {
+	var req systemV1.UpdateConfigReq
+	if err := r.Parse(&req); err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
 	}
-	err := service.System().UpdateConfig(r.Context(), data)
+	err := service.System().UpdateConfig(r.Context(), req.Data)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -42,10 +43,12 @@ func (c *Controller) UpdateConfig(r *ghttp.Request) {
 }
 
 func (c *Controller) GetLogList(r *ghttp.Request) {
-	page := r.GetQuery("page", 1).Int()
-	pageSize := r.GetQuery("pageSize", 20).Int()
-	logType := r.GetQuery("type").String()
-	list, total, err := service.System().GetLogList(r.Context(), page, pageSize, logType)
+	var req systemV1.GetLogListReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	list, total, err := service.System().GetLogList(r.Context(), req.Page, req.PageSize, req.Type)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -54,8 +57,12 @@ func (c *Controller) GetLogList(r *ghttp.Request) {
 }
 
 func (c *Controller) DeleteLog(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	err := service.System().DeleteLog(r.Context(), id)
+	var req systemV1.DeleteLogReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.System().DeleteLog(r.Context(), req.Id)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
@@ -74,8 +81,12 @@ func (c *Controller) GetNotificationList(r *ghttp.Request) {
 }
 
 func (c *Controller) MarkNotificationRead(r *ghttp.Request) {
-	id := r.Get("id").Uint()
-	err := service.System().MarkNotificationRead(r.Context(), id)
+	var req systemV1.MarkNotificationReadReq
+	if err := r.Parse(&req); err != nil {
+		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
+		return
+	}
+	err := service.System().MarkNotificationRead(r.Context(), req.Id)
 	if err != nil {
 		r.Response.WriteJson(g.Map{"code": 1, "message": err.Error()})
 		return
