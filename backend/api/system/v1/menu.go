@@ -7,7 +7,7 @@ import (
 // ==================== 菜单管理 ====================
 
 type MenuListReq struct {
-	g.Meta `path:"/system/menu/list" method:"get" tags:"系统管理-菜单管理" summary:"菜单列表"`
+	g.Meta `path:"/menu" method:"get" tags:"系统管理-菜单管理" summary:"菜单列表"`
 	Title  string `json:"title" dc:"菜单名称"`
 	Status int    `json:"status" dc:"状态"`
 }
@@ -17,7 +17,7 @@ type MenuListRes struct {
 }
 
 type MenuInfoReq struct {
-	g.Meta `path:"/system/menu/info" method:"get" tags:"系统管理-菜单管理" summary:"菜单详情"`
+	g.Meta `path:"/menu/:id" method:"get" tags:"系统管理-菜单管理" summary:"菜单详情"`
 	Id     int64 `json:"id" v:"required" dc:"菜单ID"`
 }
 type MenuInfoRes struct {
@@ -26,7 +26,7 @@ type MenuInfoRes struct {
 }
 
 type MenuAddReq struct {
-	g.Meta     `path:"/system/menu/add" method:"post" tags:"系统管理-菜单管理" summary:"添加菜单"`
+	g.Meta     `path:"/menu" method:"post" tags:"系统管理-菜单管理" summary:"添加菜单"`
 	MenuName   string `json:"menu_name" v:"required|max-length:64" dc:"菜单名称"`
 	Title      string `json:"title" v:"required|max-length:64" dc:"显示名称"`
 	ParentId   int64  `json:"parent_id" dc:"上级菜单ID"`
@@ -46,7 +46,7 @@ type MenuAddRes struct {
 }
 
 type MenuEditReq struct {
-	g.Meta     `path:"/system/menu/edit" method:"put" tags:"系统管理-菜单管理" summary:"编辑菜单"`
+	g.Meta     `path:"/menu/:id" method:"put" tags:"系统管理-菜单管理" summary:"编辑菜单"`
 	MenuId     int64  `json:"menu_id" v:"required" dc:"菜单编号"`
 	MenuName   string `json:"menu_name" v:"required|max-length:64" dc:"菜单名称"`
 	Title      string `json:"title" v:"required|max-length:64" dc:"显示名称"`
@@ -67,7 +67,7 @@ type MenuEditRes struct {
 }
 
 type MenuDelReq struct {
-	g.Meta `path:"/system/menu/del" method:"delete" tags:"系统管理-菜单管理" summary:"删除菜单"`
+	g.Meta `path:"/menu/:id" method:"delete" tags:"系统管理-菜单管理" summary:"删除菜单"`
 	Id     int64 `json:"id" v:"required" dc:"菜单ID"`
 }
 type MenuDelRes struct {
@@ -75,7 +75,7 @@ type MenuDelRes struct {
 }
 
 type MenuDropdownReq struct {
-	g.Meta `path:"/system/menu/dropdown" method:"get" tags:"系统管理-菜单管理" summary:"菜单下拉"`
+	g.Meta `path:"/menu/dropdown" method:"get" tags:"系统管理-菜单管理" summary:"菜单下拉"`
 }
 type MenuDropdownRes struct {
 	g.Meta `mime:"application/json"`
@@ -83,7 +83,7 @@ type MenuDropdownRes struct {
 }
 
 type MenuRoleReq struct {
-	g.Meta `path:"/system/menu/role" method:"get" tags:"系统管理-菜单管理" summary:"角色菜单权限"`
+	g.Meta `path:"/menu/role" method:"get" tags:"系统管理-菜单管理" summary:"角色菜单权限"`
 	RoleId int64 `json:"role_id" v:"required" dc:"角色ID"`
 }
 type MenuRoleRes struct {

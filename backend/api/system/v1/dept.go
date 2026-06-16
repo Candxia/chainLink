@@ -7,7 +7,7 @@ import (
 // ==================== 部门管理 ====================
 
 type DeptListReq struct {
-	g.Meta `path:"/system/dept/list" method:"get" tags:"系统管理-部门管理" summary:"部门列表"`
+	g.Meta `path:"/dept" method:"get" tags:"系统管理-部门管理" summary:"部门列表"`
 }
 type DeptListRes struct {
 	g.Meta `mime:"application/json"`
@@ -15,7 +15,7 @@ type DeptListRes struct {
 }
 
 type DeptInfoReq struct {
-	g.Meta `path:"/system/dept/info" method:"get" tags:"系统管理-部门管理" summary:"部门详情"`
+	g.Meta `path:"/dept/:id" method:"get" tags:"系统管理-部门管理" summary:"部门详情"`
 	Id     int64 `json:"id" v:"required" dc:"编号"`
 }
 type DeptInfoRes struct {
@@ -24,7 +24,7 @@ type DeptInfoRes struct {
 }
 
 type DeptAddReq struct {
-	g.Meta   `path:"/system/dept/add" method:"post" tags:"系统管理-部门管理" summary:"添加部门"`
+	g.Meta   `path:"/dept" method:"post" tags:"系统管理-部门管理" summary:"添加部门"`
 	ParentId int64  `json:"parent_id" dc:"上级部门ID"`
 	Name     string `json:"name" v:"required|max-length:64" dc:"部门名称"`
 	OrderNum int    `json:"order_num" d:"0" dc:"排序"`
@@ -38,7 +38,7 @@ type DeptAddRes struct {
 }
 
 type DeptEditReq struct {
-	g.Meta   `path:"/system/dept/edit" method:"put" tags:"系统管理-部门管理" summary:"编辑部门"`
+	g.Meta   `path:"/dept/:id" method:"put" tags:"系统管理-部门管理" summary:"编辑部门"`
 	Id       int64  `json:"id" v:"required" dc:"编号"`
 	ParentId int64  `json:"parent_id" dc:"上级部门ID"`
 	Name     string `json:"name" v:"required|max-length:64" dc:"部门名称"`
@@ -53,7 +53,7 @@ type DeptEditRes struct {
 }
 
 type DeptDelReq struct {
-	g.Meta `path:"/system/dept/del" method:"delete" tags:"系统管理-部门管理" summary:"删除部门"`
+	g.Meta `path:"/dept/:id" method:"delete" tags:"系统管理-部门管理" summary:"删除部门"`
 	Id     int64 `json:"id" v:"required" dc:"编号"`
 }
 type DeptDelRes struct {
@@ -61,7 +61,7 @@ type DeptDelRes struct {
 }
 
 type DeptDropdownReq struct {
-	g.Meta `path:"/system/dept/dropdown" method:"get" tags:"系统管理-部门管理" summary:"部门下拉"`
+	g.Meta `path:"/dept/dropdown" method:"get" tags:"系统管理-部门管理" summary:"部门下拉"`
 }
 type DeptDropdownRes struct {
 	g.Meta `mime:"application/json"`

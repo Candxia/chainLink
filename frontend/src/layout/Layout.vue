@@ -68,14 +68,15 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
 import { Fold, Expand, Menu, User, ArrowDown } from '@element-plus/icons-vue'
-import { asyncRouterMap } from '@/router'
+import { usePermissionStore } from '@/stores/permission'
 
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+const permissionStore = usePermissionStore()
 const collapse = ref(false)
 
-const menuList = computed(() => asyncRouterMap)
+const menuList = computed(() => permissionStore.getRouters)
 
 const breadcrumbs = computed(() => {
   const parts = route.path.split('/').filter(Boolean)

@@ -1,0 +1,28 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cl_system_backend
+    ports:
+      - "8099:8099"
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./backend/manifest:/app/manifest
+      - ./backend/resource:/app/resource
+      - ./backend/runtime:/app/runtime
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cl_system_frontend
+    ports:
+      - "8080:80"
+    environment:
+      - TZ=Asia/Shanghai
+    depends_on:
+      - backend
+    restart: unless-stopped

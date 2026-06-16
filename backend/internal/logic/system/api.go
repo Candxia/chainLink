@@ -56,7 +56,7 @@ func (s *sApi) List(ctx context.Context, in mdlSys.SysApiSearch) (list []entity.
 	}
 	if total > 0 {
 		limit, offset := in.Paginate()
-		err = m.Limit(limit).Offset(offset).OrderDesc("api_id").Scan(&list)
+		err = m.Limit(offset, limit).OrderDesc("api_id").Scan(&list)
 	}
 	return list, total, err
 }

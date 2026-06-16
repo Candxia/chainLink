@@ -7,7 +7,7 @@ import (
 // ==================== 接口管理 ====================
 
 type ApiListReq struct {
-	g.Meta   `path:"/system/api/list" method:"get" tags:"系统管理-接口管理" summary:"接口列表"`
+	g.Meta   `path:"/api" method:"get" tags:"系统管理-接口管理" summary:"接口列表"`
 	Page     int    `json:"page" d:"1" dc:"页码"`
 	PageSize int    `json:"pageSize" d:"10" dc:"每页条数"`
 	Title    string `json:"title" dc:"标题"`
@@ -22,7 +22,7 @@ type ApiListRes struct {
 }
 
 type ApiAddReq struct {
-	g.Meta `path:"/system/api/add" method:"post" tags:"系统管理-接口管理" summary:"添加接口"`
+	g.Meta `path:"/api" method:"post" tags:"系统管理-接口管理" summary:"添加接口"`
 	Title  string `json:"title" v:"required|max-length:128" dc:"标题"`
 	Path   string `json:"path" v:"required|max-length:128" dc:"路径"`
 	Type   string `json:"type" d:"BUS" v:"in:BUS,SYS,DEF" dc:"接口类型 BUS=业务 SYS=系统 DEF=自定义"`
@@ -34,7 +34,7 @@ type ApiAddRes struct {
 }
 
 type ApiEditReq struct {
-	g.Meta `path:"/system/api/edit" method:"put" tags:"系统管理-接口管理" summary:"编辑接口"`
+	g.Meta `path:"/api/:id" method:"put" tags:"系统管理-接口管理" summary:"编辑接口"`
 	Id     int64  `json:"id" v:"required" dc:"主键"`
 	Title  string `json:"title" v:"required|max-length:128" dc:"标题"`
 	Path   string `json:"path" v:"required|max-length:128" dc:"路径"`
@@ -47,7 +47,7 @@ type ApiEditRes struct {
 }
 
 type ApiDelReq struct {
-	g.Meta `path:"/system/api/del" method:"delete" tags:"系统管理-接口管理" summary:"删除接口"`
+	g.Meta `path:"/api/:id" method:"delete" tags:"系统管理-接口管理" summary:"删除接口"`
 	Id     int64 `json:"id" v:"required" dc:"主键"`
 }
 type ApiDelRes struct {
@@ -55,7 +55,7 @@ type ApiDelRes struct {
 }
 
 type ApiDropdownReq struct {
-	g.Meta `path:"/system/api/dropdown" method:"get" tags:"系统管理-接口管理" summary:"接口下拉"`
+	g.Meta `path:"/api/dropdown" method:"get" tags:"系统管理-接口管理" summary:"接口下拉"`
 }
 type ApiDropdownRes struct {
 	g.Meta `mime:"application/json"`
@@ -63,7 +63,7 @@ type ApiDropdownRes struct {
 }
 
 type ApiPathReq struct {
-	g.Meta `path:"/system/api/path" method:"get" tags:"系统管理-接口管理" summary:"接口路径下拉"`
+	g.Meta `path:"/api/path" method:"get" tags:"系统管理-接口管理" summary:"接口路径下拉"`
 	Path   string `json:"path" dc:"路径关键字"`
 }
 type ApiPathRes struct {

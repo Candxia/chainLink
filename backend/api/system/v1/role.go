@@ -7,7 +7,7 @@ import (
 // ==================== 角色管理 ====================
 
 type RoleListReq struct {
-	g.Meta   `path:"/system/role/list" method:"get" tags:"系统管理-角色管理" summary:"角色列表"`
+	g.Meta   `path:"/role" method:"get" tags:"系统管理-角色管理" summary:"角色列表"`
 	Page     int    `json:"page" d:"1" dc:"页码"`
 	PageSize int    `json:"pageSize" d:"10" dc:"每页条数"`
 	Name     string `json:"name" dc:"角色名称"`
@@ -20,7 +20,7 @@ type RoleListRes struct {
 }
 
 type RoleInfoReq struct {
-	g.Meta `path:"/system/role/info" method:"get" tags:"系统管理-角色管理" summary:"角色详情"`
+	g.Meta `path:"/role/:id" method:"get" tags:"系统管理-角色管理" summary:"角色详情"`
 	Id     int64 `json:"id" v:"required" dc:"角色ID"`
 }
 type RoleInfoRes struct {
@@ -29,7 +29,7 @@ type RoleInfoRes struct {
 }
 
 type RoleAddReq struct {
-	g.Meta       `path:"/system/role/add" method:"post" tags:"系统管理-角色管理" summary:"添加角色"`
+	g.Meta       `path:"/role" method:"post" tags:"系统管理-角色管理" summary:"添加角色"`
 	Name         string  `json:"name" v:"required|max-length:32" dc:"角色名称"`
 	Status       int     `json:"status" d:"1" v:"in:1,2" dc:"状态 1=启用 2=禁用"`
 	Remark       string  `json:"remark" dc:"备注"`
@@ -42,7 +42,7 @@ type RoleAddRes struct {
 }
 
 type RoleEditReq struct {
-	g.Meta       `path:"/system/role/edit" method:"put" tags:"系统管理-角色管理" summary:"编辑角色"`
+	g.Meta       `path:"/role/:id" method:"put" tags:"系统管理-角色管理" summary:"编辑角色"`
 	Id           int64   `json:"id" v:"required|min:2" dc:"角色ID"`
 	Name         string  `json:"name" v:"required|max-length:32" dc:"角色名称"`
 	Status       int     `json:"status" v:"in:1,2" dc:"状态 1=启用 2=禁用"`
@@ -56,7 +56,7 @@ type RoleEditRes struct {
 }
 
 type RoleDelReq struct {
-	g.Meta `path:"/system/role/del" method:"delete" tags:"系统管理-角色管理" summary:"删除角色"`
+	g.Meta `path:"/role/:id" method:"delete" tags:"系统管理-角色管理" summary:"删除角色"`
 	Id     int64 `json:"id" v:"required|min:1" dc:"角色ID"`
 }
 type RoleDelRes struct {
@@ -64,7 +64,7 @@ type RoleDelRes struct {
 }
 
 type RoleStatusReq struct {
-	g.Meta `path:"/system/role/status" method:"put" tags:"系统管理-角色管理" summary:"修改角色状态"`
+	g.Meta `path:"/role/:id/status" method:"put" tags:"系统管理-角色管理" summary:"修改角色状态"`
 	Id     int64 `json:"id" v:"required|min:2" dc:"角色ID"`
 	Status int   `json:"status" v:"required|in:1,2" dc:"状态 1=启用 2=禁用"`
 }
@@ -73,7 +73,7 @@ type RoleStatusRes struct {
 }
 
 type RoleDropdownReq struct {
-	g.Meta `path:"/system/role/dropdown" method:"get" tags:"系统管理-角色管理" summary:"角色下拉"`
+	g.Meta `path:"/role/dropdown" method:"get" tags:"系统管理-角色管理" summary:"角色下拉"`
 }
 type RoleDropdownRes struct {
 	g.Meta `mime:"application/json"`
@@ -81,7 +81,7 @@ type RoleDropdownRes struct {
 }
 
 type RoleIsMobileReq struct {
-	g.Meta       `path:"/system/role/is_mobile" method:"put" tags:"系统管理-角色管理" summary:"是否显示手机号"`
+	g.Meta       `path:"/role/:id/is_mobile" method:"put" tags:"系统管理-角色管理" summary:"是否显示手机号"`
 	Id           int64 `json:"id" v:"required|min:2" dc:"角色ID"`
 	IsShowMobile int   `json:"is_show_mobile" v:"required|in:1,2" dc:"显示手机号 1=是 2=否"`
 }

@@ -74,8 +74,8 @@ func (s *sAdmin) List(ctx context.Context, in mdlSys.SysAdminSearch) (list []mdl
 	}
 	if total > 0 {
 		limit, offset := in.Paginate()
-		err = m.Limit(limit).Offset(offset).LeftJoin("sys_role", "sys_role.id=sys_admin.role_id").
-			Fields("sys_admin.*,sys_role.name as role_name").OrderDesc("sys_admin.created_at").Scan(&list)
+		err = m.LeftJoin("sys_role", "sys_role.id=sys_admin.role_id").
+			Fields("sys_admin.*,sys_role.name as role_name").Limit(offset, limit).OrderDesc("sys_admin.created_at").Scan(&list)
 	}
 	return list, total, err
 }

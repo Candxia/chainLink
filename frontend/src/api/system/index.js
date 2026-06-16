@@ -40,40 +40,40 @@ export const systemApi = {
 // ==================== 璐﹀彿绠＄悊 ====================
 
 export function getAdminListApi(params) {
-  return service({ url: '/system/admin/list', method: 'get', params })
+  return service({ url: '/system/admin', method: 'get', params })
 }
 export function addAdminApi(data) {
-  return service({ url: '/system/admin/add', method: 'post', data })
+  return service({ url: '/system/admin', method: 'post', data })
 }
 export function editAdminApi(data) {
-  return service({ url: '/system/admin/edit', method: 'post', data })
+  return service({ url: '/system/admin', method: 'put', data })
 }
 export function delAdminApi(data) {
-  return service({ url: '/system/admin/del', method: 'post', data })
+  return service({ url: `/system/admin/${data.id}`, method: 'delete' })
 }
 export function adminPasswordApi(data) {
-  return service({ url: '/system/admin/password', method: 'post', data })
+  return service({ url: `/system/admin/${data.id}/password`, method: 'post', data })
 }
 export function adminStatusApi(data) {
-  return service({ url: '/system/admin/status', method: 'post', data })
+  return service({ url: `/system/admin/${data.id}/status`, method: 'post', data })
 }
 export function adminClickOutApi(data) {
-  return service({ url: '/system/admin/clickout', method: 'post', data })
+  return service({ url: `/system/admin/${data.id}/clickout`, method: 'post', data })
 }
 
 // ==================== 鎺ュ彛绠＄悊 ====================
 
 export function getApiListApi(params) {
-  return service({ url: '/system/api/list', method: 'get', params })
+  return service({ url: '/system/api', method: 'get', params })
 }
 export function addApiApi(data) {
-  return service({ url: '/system/api/add', method: 'post', data })
+  return service({ url: '/system/api', method: 'post', data })
 }
 export function editApiApi(data) {
-  return service({ url: '/system/api/edit', method: 'post', data })
+  return service({ url: '/system/api', method: 'post', data })
 }
 export function delApiApi(data) {
-  return service({ url: '/system/api/del', method: 'post', data })
+  return service({ url: `/system/api/${data.id}`, method: 'delete' })
 }
 export function getApiDropdownApi(params) {
   return service({ url: '/system/api/dropdown', method: 'get', params })
@@ -85,46 +85,46 @@ export function getApiPathApi(params) {
 // ==================== 瑙掕壊绠＄悊 ====================
 
 export function getRoleListApi(params) {
-  return service({ url: '/system/role/list', method: 'get', params })
+  return service({ url: '/system/role', method: 'get', params })
 }
 export function addRoleApi(data) {
-  return service({ url: '/system/role/add', method: 'post', data })
+  return service({ url: '/system/role', method: 'post', data })
 }
 export function editRoleApi(data) {
-  return service({ url: '/system/role/edit', method: 'post', data })
+  return service({ url: `/system/role/${data.id}`, method: 'put', data })
 }
 export function delRoleApi(data) {
-  return service({ url: '/system/role/del', method: 'post', data })
+  return service({ url: `/system/role/${data.id}`, method: 'delete' })
 }
 export function getRoleInfoApi(params) {
-  return service({ url: '/system/role/info', method: 'get', params })
+  return service({ url: `/system/role/${params.id}`, method: 'get', params })
 }
 export function roleStatusApi(data) {
-  return service({ url: '/system/role/status', method: 'post', data })
+  return service({ url: `/system/role/${data.id}/status`, method: 'post', data })
 }
 export function getRoleDropdownApi(params) {
   return service({ url: '/system/role/dropdown', method: 'get', params })
 }
 export function roleIsMobileApi(data) {
-  return service({ url: '/system/role/is_mobile', method: 'post', data })
+  return service({ url: `/system/role/${data.id}/is_mobile`, method: 'post', data })
 }
 
 // ==================== 閮ㄩ棬绠＄悊 ====================
 
 export function getDeptListApi(params) {
-  return service({ url: '/system/dept/list', method: 'get', params })
+  return service({ url: '/system/dept', method: 'get', params })
 }
 export function addDeptApi(data) {
-  return service({ url: '/system/dept/add', method: 'post', data })
+  return service({ url: '/system/dept', method: 'post', data })
 }
 export function editDeptApi(data) {
-  return service({ url: '/system/dept/edit', method: 'post', data })
+  return service({ url: `/system/dept/${data.id}`, method: 'put', data })
 }
 export function delDeptApi(data) {
-  return service({ url: '/system/dept/del', method: 'post', data })
+  return service({ url: `/system/dept/${data.id}`, method: 'delete' })
 }
 export function getDeptInfoApi(params) {
-  return service({ url: '/system/dept/info', method: 'get', params })
+  return service({ url: `/system/dept/${params.id}`, method: 'get', params })
 }
 export function getDeptDropdownApi(params) {
   return service({ url: '/system/dept/dropdown', method: 'get', params })
@@ -133,19 +133,19 @@ export function getDeptDropdownApi(params) {
 // ==================== 鑿滃崟绠＄悊 ====================
 
 export function getMenuListApi(params) {
-  return service({ url: '/system/menu/list', method: 'get', params })
+  return service({ url: '/system/menu', method: 'get', params })
 }
 export function addMenuApi(data) {
-  return service({ url: '/system/menu/add', method: 'post', data })
+  return service({ url: '/system/menu', method: 'post', data })
 }
 export function editMenuApi(data) {
-  return service({ url: '/system/menu/edit', method: 'post', data })
+  return service({ url: `/system/menu/${data.id}`, method: 'put', data })
 }
 export function delMenuApi(data) {
-  return service({ url: '/system/menu/del', method: 'post', data })
+  return service({ url: `/system/menu/${data.id}`, method: 'delete' })
 }
 export function getMenuInfoApi(params) {
-  return service({ url: '/system/menu/info', method: 'get', params })
+  return service({ url: `/system/menu/${params.id}`, method: 'get', params })
 }
 export function getMenuDropdownApi(params) {
   return service({ url: '/system/menu/dropdown', method: 'get', params })

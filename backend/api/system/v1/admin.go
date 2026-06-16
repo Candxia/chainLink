@@ -7,7 +7,7 @@ import (
 // ==================== 账号管理 ====================
 
 type AdminListReq struct {
-	g.Meta   `path:"/system/admin/list" method:"get" tags:"系统管理-账号管理" summary:"管理员列表"`
+	g.Meta   `path:"/admin" method:"get" tags:"系统管理-账号管理" summary:"管理员列表"`
 	Page     int    `json:"page" d:"1" dc:"页码"`
 	PageSize int    `json:"pageSize" d:"10" dc:"每页条数"`
 	Username string `json:"username" dc:"用户名"`
@@ -22,7 +22,7 @@ type AdminListRes struct {
 }
 
 type AdminInfoReq struct {
-	g.Meta `path:"/system/admin/info" method:"get" tags:"系统管理-账号管理" summary:"管理员详情"`
+	g.Meta `path:"/admin/:id" method:"get" tags:"系统管理-账号管理" summary:"管理员详情"`
 	Id     int64 `json:"id" v:"required" dc:"编号"`
 }
 type AdminInfoRes struct {
@@ -42,7 +42,7 @@ type AdminInfoRes struct {
 }
 
 type AdminAddReq struct {
-	g.Meta     `path:"/system/admin/add" method:"post" tags:"系统管理-账号管理" summary:"添加管理员"`
+	g.Meta     `path:"/admin" method:"post" tags:"系统管理-账号管理" summary:"添加管理员"`
 	Username   string `json:"username" v:"required|length:3,32" dc:"用户名"`
 	Nickname   string `json:"nickname" v:"required|length:1,20" dc:"昵称"`
 	Password   string `json:"password" v:"required|length:6,32" dc:"密码"`
@@ -55,7 +55,7 @@ type AdminAddRes struct {
 }
 
 type AdminEditReq struct {
-	g.Meta   `path:"/system/admin/edit" method:"put" tags:"系统管理-账号管理" summary:"编辑管理员"`
+	g.Meta   `path:"/admin/:id" method:"put" tags:"系统管理-账号管理" summary:"编辑管理员"`
 	Id       int64  `json:"id" v:"required" dc:"编号"`
 	Username string `json:"username" v:"required|length:3,32" dc:"用户名"`
 	Nickname string `json:"nickname" v:"required|length:1,20" dc:"昵称"`
@@ -68,7 +68,7 @@ type AdminEditRes struct {
 }
 
 type AdminDelReq struct {
-	g.Meta `path:"/system/admin/del" method:"delete" tags:"系统管理-账号管理" summary:"删除管理员"`
+	g.Meta `path:"/admin/:id" method:"delete" tags:"系统管理-账号管理" summary:"删除管理员"`
 	Id     int64 `json:"id" v:"required" dc:"编号"`
 }
 type AdminDelRes struct {
@@ -76,7 +76,7 @@ type AdminDelRes struct {
 }
 
 type AdminPasswordReq struct {
-	g.Meta   `path:"/system/admin/password" method:"put" tags:"系统管理-账号管理" summary:"修改密码"`
+	g.Meta   `path:"/admin/:id/password" method:"put" tags:"系统管理-账号管理" summary:"修改密码"`
 	Id       int64  `json:"id" v:"required" dc:"编号"`
 	Password string `json:"password" v:"required|length:6,32" dc:"新密码"`
 }
@@ -85,7 +85,7 @@ type AdminPasswordRes struct {
 }
 
 type AdminStatusReq struct {
-	g.Meta   `path:"/system/admin/status" method:"put" tags:"系统管理-账号管理" summary:"修改状态"`
+	g.Meta   `path:"/admin/:id/status" method:"put" tags:"系统管理-账号管理" summary:"修改状态"`
 	Id       int64  `json:"id" v:"required" dc:"编号"`
 	Status   int    `json:"status" v:"in:1,2,3" dc:"状态 1=正常 2=冻结 3=注销"`
 }
@@ -94,7 +94,7 @@ type AdminStatusRes struct {
 }
 
 type AdminClickOutReq struct {
-	g.Meta   `path:"/system/admin/clickout" method:"put" tags:"系统管理-账号管理" summary:"踢下线"`
+	g.Meta   `path:"/admin/:id/clickout" method:"put" tags:"系统管理-账号管理" summary:"踢下线"`
 	Username string `json:"username" v:"required" dc:"用户名"`
 }
 type AdminClickOutRes struct {

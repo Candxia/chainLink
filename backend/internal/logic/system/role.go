@@ -136,7 +136,7 @@ func (s *sRole) List(ctx context.Context, in mdlSys.SysRoleSearch) (list []mdlSy
 	}
 	if total > 0 {
 		var all []mdlSys.SysRoleList
-		allRecords, err2 := m.Fields("id,parent_id,link,code,name,status,is_del,is_show_mobile,level,remark,menu_all,created_at,created_by,updated_at,updated_by").OrderAsc("parent_id").All()
+		allRecords, err2 := m.Fields("id,parent_id,code,name,status,is_del,is_show_mobile,level,remark,menu_all,created_at,created_by,updated_at,updated_by").OrderAsc("parent_id").All()
 		if err2 != nil {
 			return list, total, err2
 		}

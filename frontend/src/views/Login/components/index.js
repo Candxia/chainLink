@@ -1,5 +1,5 @@
-import LoginForm from './LoginForm.vue'
+import Captcha from './Captcha.vue'
 
-export { LoginForm }
+export { Captcha }
 
-export default LoginForm
+export default Captcha

@@ -4,6 +4,7 @@ go 1.22
 
 require (
 	github.com/dustin/go-humanize v1.0.1
+	github.com/gogf/gf/contrib/drivers/mysql/v2 v2.5.6
 	github.com/gogf/gf/v2 v2.5.6
 	github.com/shopspring/decimal v1.3.1
 )
@@ -16,7 +17,6 @@ require (
 	github.com/go-logr/logr v1.2.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-sql-driver/mysql v1.7.1 // indirect
-	github.com/gogf/gf/contrib/drivers/mysql/v2 v2.5.6 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/grokify/html-strip-tags-go v0.0.1 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect

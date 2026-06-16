@@ -6,7 +6,7 @@ export const constantRouterMap = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/login',
     name: 'Root',
     meta: { hidden: true }
   },
@@ -24,16 +24,6 @@ export const constantRouterMap = [
     component: () => import('@/views/Login/Login.vue'),
     name: 'Login',
     meta: { hidden: true, title: 'Login', noTagsView: true }
-  },
-  {
-    path: '/personal',
-    component: Layout,
-    redirect: '/personal/personal-center',
-    name: 'Personal',
-    meta: { title: 'Personal', hidden: true, canTo: true },
-    children: [
-      { path: 'personal-center', component: () => import('@/views/Personal/PersonalCenter.vue'), name: 'PersonalCenter', meta: { title: 'Personal Center', hidden: true, canTo: true } }
-    ]
   },
   {
     path: '/404',
@@ -67,6 +57,16 @@ export const asyncRouterMap = [
       { path: 'role', component: () => import('@/views/System/role/SysRole.vue'), name: 'SysRole', permission: ['SysRoleAdd', 'SysRoleDel', 'SysRoleStatus', 'SysRoleEdit', 'SysRoleInfo', 'SysRoleList'], meta: { title: 'Roles', icon: 'peoples', noCache: false, hidden: false } },
       { path: 'dept', component: () => import('@/views/System/dept/SysDept.vue'), name: 'SysDept', permission: ['SysDeptAdd', 'SysDeptDel', 'SysDeptEdit', 'SysDeptInfo', 'SysDeptList'], meta: { title: 'Dept', icon: 'tree', noCache: false, hidden: false } },
       { path: 'menu', component: () => import('@/views/System/menu/SysMenu.vue'), name: 'SysMenu', permission: ['SysMenuAdd', 'SysMenuDel', 'SysMenuEdit', 'SysMenuInfo', 'SysMenuList', 'SysMenuDrop'], meta: { title: 'Menu', icon: 'tree-table', noCache: false, hidden: false } }
+    ]
+  },
+  {
+    path: '/personal',
+    component: Layout,
+    redirect: '/personal/personal-center',
+    name: 'Personal',
+    meta: { title: 'Personal', hidden: true, canTo: true },
+    children: [
+      { path: 'personal-center', component: () => import('@/views/Personal/PersonalCenter.vue'), name: 'PersonalCenter', meta: { title: 'Personal Center', hidden: true, canTo: true } }
     ]
   }
 ]
